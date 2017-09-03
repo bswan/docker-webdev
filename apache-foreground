@@ -1,13 +1,5 @@
 #!/bin/bash  
 
-# Only start database if NO_DB is not passed
-if [ -z ${NO_DB+x} ]; then
-	echo "Starting MySQL..."
-	/etc/init.d/mysql start
-else
-	echo "Running without DB..."
-fi
-
 echo "Starting Apache..."
 apache2ctl start
 
