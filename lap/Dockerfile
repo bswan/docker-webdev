@@ -41,12 +41,8 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.i
 	echo "date.timezone = Australia/Sydney" > /etc/php/7.0/fpm/conf.d/timezone.ini
 	
 # Apache & PHP Configuration
-RUN echo "webdev is ok" > /var/www/html/index.html && \
-	a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
-	
-ADD apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/000-default.conf
-ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/000-wildcard-php56-vhost.conf
-	
+RUN echo "webdev is ok" > /var/www/html/index.html 
+
 # Composer
 RUN wget https://getcomposer.org/composer.phar && \
 	chmod +x composer.phar && \
@@ -56,10 +52,3 @@ RUN wget https://getcomposer.org/composer.phar && \
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - && \
 	apt-get install -qqy npm nodejs && \
 	npm install -g grunt-cli gulp bower
-
-# Run apache in foreground mode, because Docker needs a foreground
-ADD apache-foreground /usr/local/bin/apache-foreground
-
-EXPOSE 80 443
-
-CMD ["/usr/local/bin/apache-foreground"]
