@@ -2,8 +2,11 @@ FROM ubuntu:16.04
 MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
-### SET UP
+### Change to default mirror to AU mirror - https://wiki.ubuntu.com/AustralianTeam/LocalAptMirrors#Australian_Mirrors
+RUN sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list
+RUN sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
+### SET UP
 RUN apt-get -qq update
 
 # Supporting tools
@@ -41,8 +44,8 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.i
 RUN echo "webdev is ok" > /var/www/html/index.html && \
 	a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
 	
-ADD apache-wildcard-php70-vhost /etc/apache2/sites-available/000-default.conf
-ADD apache-wildcard-php56-vhost /etc/apache2/sites-available/000-wildcard-php56-vhost.conf
+ADD apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/000-default.conf
+ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/000-wildcard-php56-vhost.conf
 	
 # Composer
 RUN wget https://getcomposer.org/composer.phar && \
@@ -50,16 +53,12 @@ RUN wget https://getcomposer.org/composer.phar && \
 	mv composer.phar /usr/local/bin/composer && \
 	
 # NodeJS and common global NPM modules
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - && \
-	apt-get install -qqy nodejs && \
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - && \
+	apt-get install -qqy npm nodejs && \
 	npm install -g grunt-cli gulp bower
-
-VOLUME /var/www
 
 # Run apache in foreground mode, because Docker needs a foreground
 ADD apache-foreground /usr/local/bin/apache-foreground
-
-WORKDIR /var/www
 
 EXPOSE 80 443
 
