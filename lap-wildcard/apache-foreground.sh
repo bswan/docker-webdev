@@ -1,12 +1,34 @@
 #!/bin/bash
 
-echo '127.0.0.1	webdev' >> /etc/hosts
+# Setup custom 'webdev' host IP if passed
+if [ -z ${WEBDEV_HOST_IP+x} ]; then
+	#default
+	echo '127.0.0.1	webdev' >> /etc/hosts
+else
+	#custom value from WEBDEV_HOST_IP
+	echo "$WEBDEV_HOST_IP	webdev" >> /etc/hosts
+fi
 
-echo "==============Starting PHP7.0 FPM..."
-service php7.0-fpm start
+# Setup custom 'db' host IP
+if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
+	#default
+	echo '127.0.0.1	db' >> /etc/hosts
+else
+	#custom value from WEBDEV_DB_HOST_IP
+	echo "$WEBDEV_DB_HOST_IP	db" >> /etc/hosts
+fi
 
-echo "==============Starting PHP5.6 FPM..."
-service php5.6-fpm start
+# Only start PHP 7.0 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
+	echo "==============Starting PHP 7.0 FPM..."
+	service php7.0-fpm start
+fi
+
+# Only start PHP 5.6 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_56_FPM" = 1 ]; then
+	echo "==============Starting PHP 5.6 FPM..."
+	service php5.6-fpm start
+fi
 
 echo "==============Starting Apache..."
 # Note: we don't just use "apache2ctl" here because it itself is just a shell-script wrapper around apache2 which provides extra functionality like "apache2ctl start" for launching apache2 in the background.

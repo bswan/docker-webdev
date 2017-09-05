@@ -25,4 +25,9 @@ ADD apache-foreground.sh /usr/local/bin/
 
 EXPOSE 80 443
 
+ENV WEBDEV_HOST_IP				127.0.0.1
+ENV WEBDEV_DB_HOST_IP			127.0.0.1
+ENV WEBDEV_ENABLE_PHP_56_FPM 	1
+ENV WEBDEV_ENABLE_PHP_70_FPM 	1
+
 CMD ["apache-foreground.sh"]
