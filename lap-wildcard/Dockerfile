@@ -6,8 +6,16 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
 
 # Setup Apache permission for shared folder /media/www/
-ADD apache-shared-workplace-folder.conf /etc/apache2/conf-available/apache-shared-workplace-folder.conf
-RUN a2enconf apache-shared-workplace-folder.conf
+ADD apache-shared-workplace-folder.conf /etc/apache2/conf-available/shared-workplace-folder.conf
+RUN a2enconf shared-workplace-folder.conf
+
+# Setup /phpinfo alias
+RUN mkdir /var/www/php/ && \
+	chmod +x /var/www/php/ && \
+	echo '<?php phpinfo() ?>' > /var/www/php/phpinfo.php && \
+	chmod +x /var/www/php/phpinfo.php && \
+	echo 'Alias /phpinfo /var/www/php/phpinfo.php' > /etc/apache2/conf-available/phpinfo.conf && \
+ 	a2enconf phpinfo.conf
 
 # Setup Apache wildcard vhost for multi PHP versions
 ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/000-default.conf
@@ -26,7 +34,7 @@ ADD apache-foreground.sh /usr/local/bin/
 EXPOSE 80 443
 
 ENV WEBDEV_HOST_IP				127.0.0.1
-ENV WEBDEV_DB_HOST_IP			127.0.0.1
+ENV WEBDEV_DB_HOST_IP			192.168.99.100
 ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
 
