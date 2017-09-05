@@ -16,7 +16,7 @@ ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-p
 
 RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf
 
-# Forward request and error logs to docker log collector
+# Forward apache logs to docker console.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
 
