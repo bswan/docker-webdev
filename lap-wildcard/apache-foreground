@@ -1,7 +1,0 @@
-#!/bin/bash
-
-echo "Starting Apache..."
-apache2ctl start
-
-echo "Showing logs..."
-tail -f /var/log/apache2/*.log
