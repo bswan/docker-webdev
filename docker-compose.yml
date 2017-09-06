@@ -1,0 +1,31 @@
+version: "3.2"
+services:
+  web:
+    image: internetrix/webdev:lap-wildcard
+    volumes:
+      - type: bind
+        source: /media/www
+        target: /media/www
+    ports:
+      - "80:80"
+    links:
+      - db
+    environment:
+      - WEBDEV_ENABLE_PHP_56_FPM=1
+      - WEBDEV_ENABLE_PHP_70_FPM=1
+  db:
+    image: mariadb:10.1
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "48080:80"
+    links:
+      - db
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root123
