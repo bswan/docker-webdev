@@ -24,6 +24,15 @@ ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-p
 
 RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf
 
+# Setup phpmyadmin
+ADD apache-phpmyadmin.conf /etc/apache2/conf-available/phpmyadmin.conf
+
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.4/phpMyAdmin-4.7.4-all-languages.tar.gz && \
+	tar xzf phpMyAdmin-4.7.4-all-languages.tar.gz && \
+	rm phpMyAdmin-4.7.4-all-languages.tar.gz && \
+	mv phpMyAdmin-4.7.4-all-languages /opt/phpmyadmin && \
+	a2enconf phpmyadmin.conf
+
 # Forward apache logs to docker console.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
