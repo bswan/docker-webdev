@@ -40,4 +40,4 @@ ENV WEBDEV_PHPMYADMIN_DB_PW 	root123
 ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
 
-CMD ["apache-foreground.sh"]
+CMD ["/usr/local/bin/apache-foreground.sh"]
