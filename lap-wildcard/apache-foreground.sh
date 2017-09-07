@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Mount CIFS folder
+echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" >> /etc/fstab
+echo '==Trying to mount Windows shared folder via network';
+mkdir /media/www
+mount -a
+
 # Setup custom 'db' host IP
 if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
 	echo "No custom WEBDEV_DB_HOST_IP"

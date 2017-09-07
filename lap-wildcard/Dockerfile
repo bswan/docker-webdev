@@ -18,11 +18,12 @@ RUN mkdir /var/www/php/ && \
  	a2enconf phpinfo.conf
 
 # Setup Apache wildcard vhost for multi PHP versions
-ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/000-default.conf
 ADD apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/001-wildcard-php70-vhost.conf
 ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-php56-vhost.conf
+# Default wildcard has lowest priority
+ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/003-wildcard-default.conf
 
-RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf
+RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-default.conf
 
 # Forward apache logs to docker console.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
@@ -39,5 +40,8 @@ ENV WEBDEV_PHPMYADMIN_DB_USER 	root
 ENV WEBDEV_PHPMYADMIN_DB_PW 	root123
 ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
+ENV WEBDEV_CIFS_HOST_FOLDER 	//192.168.99.1/www
+ENV WEBDEV_CIFS_USER 			container
+ENV WEBDEV_CIFS_PW 				container123
 
 CMD ["/usr/local/bin/apache-foreground.sh"]
