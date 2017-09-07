@@ -31,6 +31,7 @@ RUN ln -sf /dev/stderr /var/log/apache2/error.log
 
 # Run apache in foreground
 ADD apache-foreground.sh /usr/local/bin/
+RUN ["chmod", "+x", "/usr/local/bin/apache-foreground.sh"]
 
 EXPOSE 80 443
 
