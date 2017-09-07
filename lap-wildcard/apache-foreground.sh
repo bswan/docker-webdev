@@ -1,18 +1,7 @@
 #!/bin/bash
 
-# Setup custom 'webdev' host IP if passed
-if [ -z ${WEBDEV_HOST_IP+x} ]; then
-	#default
-	echo '127.0.0.1	webdev' >> /etc/hosts
-else
-	#custom value from WEBDEV_HOST_IP
-	echo "$WEBDEV_HOST_IP	webdev" >> /etc/hosts
-fi
-
 # Setup custom 'db' host IP
 if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
-	#default
-	echo '127.0.0.1	db' >> /etc/hosts
 else
 	#custom value from WEBDEV_DB_HOST_IP
 	echo "$WEBDEV_DB_HOST_IP	db" >> /etc/hosts
