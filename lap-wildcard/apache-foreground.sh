@@ -2,6 +2,7 @@
 
 # Setup custom 'db' host IP
 if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
+	echo "No custom WEBDEV_DB_HOST_IP"
 else
 	#custom value from WEBDEV_DB_HOST_IP
 	echo "$WEBDEV_DB_HOST_IP	db" >> /etc/hosts
