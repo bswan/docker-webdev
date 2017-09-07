@@ -43,6 +43,18 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.i
 # Apache & PHP Configuration
 RUN echo "webdev is ok" > /var/www/html/index.html 
 
+# Setup phpmyadmin
+ADD apache-phpmyadmin.conf /etc/apache2/conf-available/phpmyadmin.conf
+
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.4/phpMyAdmin-4.7.4-all-languages.tar.gz && \
+	tar xzf phpMyAdmin-4.7.4-all-languages.tar.gz -C /opt && \
+	rm phpMyAdmin-4.7.4-all-languages.tar.gz && \
+	mv /opt/phpMyAdmin-4.7.4-all-languages /opt/phpmyadmin && \
+	a2enconf phpmyadmin.conf
+	
+# Add default phpmyadmin config
+ADD phpmyadmin.config.inc.php /opt/phpmyadmin/config.inc.php
+
 # Composer
 RUN wget https://getcomposer.org/composer.phar && \
 	chmod +x composer.phar && \

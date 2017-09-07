@@ -24,15 +24,6 @@ ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-p
 
 RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf
 
-# Setup phpmyadmin
-ADD apache-phpmyadmin.conf /etc/apache2/conf-available/phpmyadmin.conf
-
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.4/phpMyAdmin-4.7.4-all-languages.tar.gz && \
-	tar xzf phpMyAdmin-4.7.4-all-languages.tar.gz && \
-	rm phpMyAdmin-4.7.4-all-languages.tar.gz && \
-	mv phpMyAdmin-4.7.4-all-languages /opt/phpmyadmin && \
-	a2enconf phpmyadmin.conf
-
 # Forward apache logs to docker console.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
@@ -43,6 +34,9 @@ ADD apache-foreground.sh /usr/local/bin/
 EXPOSE 80 443
 
 #ENV WEBDEV_DB_HOST_IP			192.168.99.100
+ENV WEBDEV_PHPMYADMIN_DB_HOST 	mariadb
+ENV WEBDEV_PHPMYADMIN_DB_USER 	root
+ENV WEBDEV_PHPMYADMIN_DB_PW 	root123
 ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
 
