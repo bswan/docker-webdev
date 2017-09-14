@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Mount CIFS folder
-echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" > /etc/fstab
+echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" > /etc/fstab
 echo '==Trying to mount Windows shared folder via network';
 mkdir /media/www
 mount -a
