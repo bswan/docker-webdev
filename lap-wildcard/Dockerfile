@@ -6,6 +6,18 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install xdebug for PHP 5.6+
 RUN apt-get install php-xdebug
 
+# Update PHP 5.6 config
+RUN echo "upload_max_filesize=500M" >> /etc/php/5.6/fpm/php.ini && \
+	echo "post_max_size=500M" >> /etc/php/5.6/fpm/php.ini && \
+	echo "display_errors=On" >> /etc/php/5.6/fpm/php.ini && \
+	echo "zlib.output_compression=On" >> /etc/php/5.6/fpm/php.ini
+	
+# Update PHP 7.0 config
+RUN	echo "upload_max_filesize=500M" >> /etc/php/7.0/fpm/php.ini && \
+	echo "post_max_size=500M\n" >> /etc/php/7.0/fpm/php.ini && \
+	echo "display_errors=On" >> /etc/php/7.0/fpm/php.ini && \
+	echo "zlib.output_compression=On" >> /etc/php/7.0/fpm/php.ini
+
 ### Apache Configuration
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
 
@@ -30,6 +42,7 @@ ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/003-wildcard
 RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-default.conf
 
 # Forward apache logs to docker console.
+RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
 
 # Run apache in foreground
