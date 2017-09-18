@@ -26,7 +26,6 @@ ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/003-wildcard
 RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-default.conf
 
 # Forward apache logs to docker console.
-RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
 
 # Run apache in foreground
