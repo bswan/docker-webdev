@@ -2,7 +2,11 @@ FROM internetrix/webdev:lap
 MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
-### Apache & PHP Configuration
+### PHP Configuration
+# Install xdebug for PHP 5.6+
+RUN apt-get install php-xdebug
+
+### Apache Configuration
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
 
 # Setup Apache permission for shared folder /media/www/
