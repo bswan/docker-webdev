@@ -10,7 +10,7 @@ RUN sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.li
 RUN apt-get -qq update
 
 # Supporting tools
-RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools
+RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils
 
 RUN echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
 	echo "en_US.UTF-8 UTF-8\n" > /etc/locale.gen && \
