@@ -29,13 +29,17 @@ RUN apt-get -qq update
 RUN apt-get -qqy upgrade
 	
 # PHP 5.6
-RUN apt-get -qqy install php5.6 php5.6-cli php5.6-fpm php5.6-mysql php5.6-curl php5.6-soap php5.6-common php5.6-gd php5.6-mcrypt php5.6-tidy php5.6-mbstring php5.6-xml
+RUN apt-get -qqy install php5.6 php5.6-cli php5.6-fpm php5.6-mysql && \
+	php5.6-common php5.6-curl php5.6-soap php5.6-gd php5.6-mcrypt php5.6-tidy && \
+	php5.6-mbstring php5.6-xml php5.6-intl
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php/5.6/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php/5.6/fpm/conf.d/timezone.ini
 	
 # PHP 7.0
-RUN apt-get -qqy install php7.0 php7.0-cli php7.0-fpm php7.0-mysql php7.0-curl php7.0-soap php7.0-common php7.0-gd php7.0-mcrypt php7.0-tidy php7.0-mbstring php7.0-xml
+RUN apt-get -qqy install php7.0 php7.0-cli php7.0-fpm php7.0-mysql && \
+	php7.0-curl php7.0-soap php7.0-common php7.0-gd php7.0-mcrypt php7.0-tidy && \
+	php7.0-mbstring php7.0-xml php7.0-intl
 	
 RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php/7.0/fpm/conf.d/timezone.ini
