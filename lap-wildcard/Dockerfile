@@ -36,10 +36,12 @@ RUN mkdir /var/www/php/ && \
 # Setup Apache wildcard vhost for multi PHP versions
 ADD apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/001-wildcard-php70-vhost.conf
 ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-php56-vhost.conf
+# Setup Apache wildcard vhost for multi PHP versions
+ADD apache-wildcard-tmpfs-php70-vhost.conf /etc/apache2/sites-available/003-wildcard-tmpfs-php70-vhost.conf
 # Default wildcard has lowest priority
-ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/003-wildcard-default.conf
+ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
-RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-default.conf
+RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-tmpfs-php70-vhost.conf 111-wildcard-default.conf
 
 # Forward apache logs to docker console.
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
