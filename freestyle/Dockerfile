@@ -1,4 +1,4 @@
-FROM perl:5.26
+FROM debian:9.2
 MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -6,10 +6,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update
 
 # Supporting tools
-RUN apt-get -qqy install wget telnet vim curl git bzip2 zip unzip apache2
+RUN apt-get -qqy install wget telnet vim nano curl git bzip2 zip unzip apache2 libapache2-mod-perl2
 
-# Link /usr/bin/perl (system default one) to /usr/local/bin/perl (container installed one which is perl:5.26)
-RUN rm /usr/bin/perl && ln -s /usr/local/bin/perl /usr/bin/perl
+# Enable cgi for mod-perl2
+RUN a2enmod cgi
 
 # Install / Setup Perl modules checker
 RUN cpan Module::Extract::Use Module::ExtractUse && \
@@ -160,3 +160,5 @@ RUN cpan XML::Quote
 RUN cpan XML::Smart
 RUN cpan XML::Twig
 RUN cpan XSLoader
+
+
