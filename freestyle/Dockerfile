@@ -75,6 +75,20 @@ RUN apt-get -qqy install libyaml-perl && \
 	libxml-atom-perl && \
 	libxml-quote-perl && \
 	libxml-smart-perl && \
-	libxml-twig-perl && \
+	libxml-twig-perl
 
-
+# Install perl modules required by most of freestyle or affinity projects
+RUN apt-get -qqy install libauthen-captcha-perl && \
+	libhtml-diff-perl && \
+	libimage-info-perl && \
+	libnet-akismet-perl && \
+	libsoap-lite-perl && \
+	libspreadsheet-parseexcel-perl && \
+	libswitch-perl && \
+	libtime-parsedate-perl && \
+	libtime-stopwatch-perl && \
+	libxml-rss-perl
+	
+	
+	
+	
