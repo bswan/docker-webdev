@@ -20,73 +20,72 @@ RUN apt-get -qqy install libmodule-extract-use-perl && \
 	chmod +x /usr/local/bin/extract_perl_modules
 
 # Install perl modules required by freestyle /www/lib
-RUN apt-get -qqy install libyaml-perl && \
-	libarchive-zip-perl && \
-	libmethod-autoload-perl && \
-	libcgi-pm-perl && \
-	libcgi-session-perl && \
-	libcache-memcached-fast-perl && \
-	libcaptcha-recaptcha-perl && \
-	libcrypt-openssl-rsa-perl && \
-	libdate-calc-perl && \
-	libdatetime-perl && \
-	libdatetime-format-http-perl && \
-	libdatetime-format-mail-perl && \
-	libdatetime-format-mysql-perl && \
-	libemail-address-perl && \
-	libemail-mime-perl && \
-	libemail-sender-perl && \
-	libfile-slurp-perl && \
-	libfile-tail-perl && \
-	libfile-type-perl && \
-	libfile-chdir-perl && \
-	libfont-ttf-perl && \
-	libgd-perl && \
-	libgd-graph-perl && \
-	libgeo-ip-perl && \
-	libgimp-compat-perl && \
-	libgtk2-perl && \
-	libhtml-mason-perl && \
-	libhtml-parsebrowser-perl && \
-	libhttp-dav-perl && \
-	libjson-perl && \
-	liblingua-en-numbers-ordinate-perl && \
-	liblist-moreutils-perl && \
-	liblocale-subcountry-perl && \
-	liblog-log4perl-perl && \
-	libmail-dkim-perl && \
-	libmail-imapclient-perl && \
-	libmodule-find-perl && \
-	libmoose-perl && \
-	libmoosex-singleton-perl && \
-	libnet-ldap-perl && \
-	libnet-oauth-perl && \
-	libnet-twitter-perl && \
-	libpdf-reuse-perl && \
-	libsort-versions-perl && \
-	libspreadsheet-writeexcel-perl && \
-	libstatistics-lite-perl && \
-	libtemplate-perl && \
-	libtext-aspell-perl && \
-	libtext-context-perl && \
-	libtext-reform-perl && \
-	libtext-xsv-perl && \
-	libtext-csv-perl && \
-	libxml-atom-perl && \
-	libxml-quote-perl && \
-	libxml-smart-perl && \
-	libxml-twig-perl
+RUN apt-get -qqy install libyaml-perl \
+	libarchive-zip-perl \
+	libmethod-autoload-perl \
+	libcgi-pm-perl \
+	libcgi-session-perl \
+	libcache-memcached-fast-perl \
+	libcaptcha-recaptcha-perl \
+	libcrypt-openssl-rsa-perl \
+	libdate-calc-perl \
+	libdatetime-perl \
+	libdatetime-format-http-perl \
+	libdatetime-format-mail-perl \
+	libdatetime-format-mysql-perl \
+	libemail-address-perl \
+	libemail-mime-perl \
+	libemail-sender-perl \
+	libfile-slurp-perl \
+	libfile-tail-perl \
+	libfile-type-perl \
+	libfile-chdir-perl \
+	libfont-ttf-perl \
+	libgd-perl \
+	libgd-graph-perl \
+	libgeo-ip-perl \
+	libgtk2-perl \
+	libhtml-mason-perl \
+	libhttp-dav-perl \
+	libjson-perl \
+	liblingua-en-numbers-ordinate-perl \
+	liblist-moreutils-perl \
+	liblocale-subcountry-perl \
+	liblog-log4perl-perl \
+	libmail-dkim-perl \
+	libmail-imapclient-perl \
+	libmodule-find-perl \
+	libmoose-perl \
+	libmoosex-singleton-perl \
+	libnet-ldap-perl \
+	libnet-oauth-perl \
+	libnet-twitter-perl \
+	libpdf-reuse-perl \
+	libsort-versions-perl \
+	libspreadsheet-writeexcel-perl \
+	libstatistics-lite-perl \
+	libtemplate-perl \
+	libtext-aspell-perl \
+	libtext-context-perl \
+	libtext-reform-perl \
+	libtext-csv-perl \
+	libxml-atom-perl \
+	libxml-quote-perl \
+	libxml-smart-perl \
+	libxml-twig-perl \
+	libextutils-depends-perl \
+	libgd-securityimage-perl
 
 # Install perl modules required by most of freestyle or affinity projects
-RUN apt-get -qqy install libauthen-captcha-perl && \
-	libhtml-diff-perl && \
-	libimage-info-perl && \
-	libnet-akismet-perl && \
-	libsoap-lite-perl && \
-	libspreadsheet-parseexcel-perl && \
-	libswitch-perl && \
-	libtime-parsedate-perl && \
-	libtime-stopwatch-perl && \
+RUN apt-get -qqy install libauthen-captcha-perl \
+	libhtml-diff-perl \
+	libimage-info-perl \
+	libnet-akismet-perl \
+	libsoap-lite-perl \
+	libspreadsheet-parseexcel-perl \
+	libswitch-perl \
+	libtime-parsedate-perl \
+	libtime-stopwatch-perl \
 	libxml-rss-perl
 	
 	
