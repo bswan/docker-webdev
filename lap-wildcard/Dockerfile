@@ -33,6 +33,10 @@ RUN mkdir /var/www/php/ && \
 	echo 'Alias /phpinfo /var/www/php/phpinfo.php' > /etc/apache2/conf-available/phpinfo.conf && \
  	a2enconf phpinfo.conf
 
+# Setup script to handle project sync to /tmpwww/ folder
+ADD rsync_project_to_tmpwww.php /var/www/php/rsync_project_to_tmpwww.php
+RUN chmod +x /var/www/php/rsync_project_to_tmpwww.php
+
 # Setup Apache wildcard vhost for multi PHP versions
 ADD apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/001-wildcard-php70-vhost.conf
 ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-php56-vhost.conf
