@@ -21,10 +21,14 @@ else
 fi
 
 # Setup phpmyadmin db config
+## Remove old webdev config
+sed -i '/##START-webdev-config/,/##END-webdev-config/d' /opt/phpmyadmin/config.inc.php
+echo "##START-webdev-config" >> /opt/phpmyadmin/config.inc.php
 echo "# Override default config" >> /opt/phpmyadmin/config.inc.php
 echo "\$cfg['Servers'][1]['host'] = '$WEBDEV_PHPMYADMIN_DB_HOST';" >> /opt/phpmyadmin/config.inc.php
 echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmyadmin/config.inc.php
 echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin/config.inc.php
+echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 
 # Only start PHP 7.0 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
 if [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
