@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# Mount CIFS folder
-echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" > /etc/fstab
-echo '==Trying to mount Windows shared folder via network';
-mkdir /media/www
-mount -a
+# CIFS config for Windows
+# Mount CIFS folder if not exists (Mac might use bind mount on /media/www)
+if [ ! -d /media/www ]; then
+	echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" > /etc/fstab
+	echo '==Going to mount Windows shared folder via network';
+	mkdir /media/www
+	mount -a
+	if [ "$(ls -A /media/www 2> /dev/null)" != "" ]; then
+		echo 'CIFS folder is successfully mounted'
+	fi
+fi
 
 # Setup custom 'db' host IP
 if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
