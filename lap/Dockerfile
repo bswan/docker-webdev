@@ -3,8 +3,9 @@ MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
 ### Change to default mirror to AU mirror - https://wiki.ubuntu.com/AustralianTeam/LocalAptMirrors#Australian_Mirrors
-RUN sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list
-RUN sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
+RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
+	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
+	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
 ### SET UP
 RUN apt-get -qq update
