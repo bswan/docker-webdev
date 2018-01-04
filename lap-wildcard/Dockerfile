@@ -11,7 +11,7 @@ ADD webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
 RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini
 
 # Specific config for php 5.6
-RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9056~g' /etc/php/5.6/fpm/php.ini
+#RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9056~g' /etc/php/5.6/fpm/php.ini
 
 # Specific config for php 7.0
 #RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9070~g' /etc/php/7.0/fpm/php.ini
