@@ -41,13 +41,13 @@ if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
         die;
     }
 
-    $cmd = "rsync -urhtP --info=stats2,name0,progress0 {$srcDocRootPath} {$destPath}";
+    $cmd = "rsync -urhtP --exclude '.git' --exclude 'pub/media/*' --exclude 'var' --exclude 'silverstripe-cache' --info=stats2,name0,progress0 {$srcDocRootPath} {$destPath}";
 
     $sync_outputs = shell_exec($cmd);
     
     //write outputs to log file
     if(file_exists($destDocRootPath)){
-        file_put_contents($destDocRootPath . '/tmpfs-sync.log', $sync_outputs, FILE_APPEND);
+        file_put_contents($destDocRootPath . '/tmpfs-sync.log', $_SERVER['REQUEST_URI'] . "\n\r" . $sync_outputs, FILE_APPEND);
     }else{
         echo '<p>Destination folder is not found after sync command. Please check the sync command output.</p>';
         echo '<p>==================</p>';
