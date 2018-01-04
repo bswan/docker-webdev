@@ -6,17 +6,15 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install xdebug for PHP 5.6+
 RUN apt-get install php-xdebug
 
-# Update PHP 5.6 config
-RUN echo "upload_max_filesize=500M" >> /etc/php/5.6/fpm/php.ini && \
-	echo "post_max_size=500M" >> /etc/php/5.6/fpm/php.ini && \
-	echo "display_errors=On" >> /etc/php/5.6/fpm/php.ini && \
-	echo "zlib.output_compression=On" >> /etc/php/5.6/fpm/php.ini
-	
-# Update PHP 7.0 config
-RUN	echo "upload_max_filesize=500M" >> /etc/php/7.0/fpm/php.ini && \
-	echo "post_max_size=500M\n" >> /etc/php/7.0/fpm/php.ini && \
-	echo "display_errors=On" >> /etc/php/7.0/fpm/php.ini && \
-	echo "zlib.output_compression=On" >> /etc/php/7.0/fpm/php.ini
+# Add custom PHP 5.6 and 7.0 config
+ADD webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
+RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini
+
+# Specific config for php 5.6
+RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9056~g' /etc/php/5.6/fpm/php.ini
+
+# Specific config for php 7.0
+#RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9070~g' /etc/php/7.0/fpm/php.ini
 
 ### Apache Configuration
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
@@ -57,12 +55,12 @@ RUN ["chmod", "+x", "/usr/local/bin/apache-foreground.sh"]
 
 EXPOSE 80 443
 
-#ENV WEBDEV_DB_HOST_IP			192.168.99.100
 ENV WEBDEV_PHPMYADMIN_DB_HOST 	mariadb
 ENV WEBDEV_PHPMYADMIN_DB_USER 	root
 ENV WEBDEV_PHPMYADMIN_DB_PW 	root123
 ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
+ENV WEBDEV_REMOTE_HOST_IP		192.168.99.1
 ENV WEBDEV_CIFS_HOST_FOLDER 	//192.168.99.1/www
 ENV WEBDEV_CIFS_USER 			container
 ENV WEBDEV_CIFS_PW 				container123

@@ -30,6 +30,12 @@ echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmy
 echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin/config.inc.php
 echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 
+# Update PHP xdebug.remote_host IP
+if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini 
+fi
+
 # Only start PHP 7.0 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
 if [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
 	echo "==============Starting PHP 7.0 FPM..."
