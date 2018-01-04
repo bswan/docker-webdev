@@ -59,7 +59,7 @@ ADD phpmyadmin.config.inc.php /opt/phpmyadmin/config.inc.php
 # Composer
 RUN wget https://getcomposer.org/composer.phar && \
 	chmod +x composer.phar && \
-	mv composer.phar /usr/local/bin/composer && \
+	mv composer.phar /usr/local/bin/composer
 	
 # NodeJS and common global NPM modules
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - && \
