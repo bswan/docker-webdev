@@ -41,9 +41,9 @@ if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
         die;
     }
     
-    //sync specific files from files change log if the log file isn't empty.
+    //sync specific files from .file.changes.log if the log file isn't empty.
     $syncFromListCMD = '';
-    $logFilename = 'file.changes.log';
+    $logFilename = '.file.changes.log';
     $logFilePath = $srcDocRootPath . '/' . $logFilename;
     if(file_exists($logFilePath) && filesize($logFilePath)){
         $syncFromListCMD = "--files-from={$logFilePath}";
@@ -58,9 +58,9 @@ if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
 
     $sync_outputs = shell_exec($cmd);
     
-    //clear files change log after sync
+    //delete .file.changes.log after sync
     if(file_exists($logFilePath)){
-        file_put_contents($logFilePath, "");
+        unlink($logFilePath);
     }
     
     //write outputs to log file
