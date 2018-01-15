@@ -2,7 +2,7 @@
 
 # CIFS config for Windows
 # Mount CIFS folder if not exists (Mac might use bind mount on /media/www)
-if [ ! -d /media/www ]; then
+if [ ! -d /media/www ] || [ "$(ls -A /media/www 2> /dev/null)" == "" ]; then
 	echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" > /etc/fstab
 	echo '==Going to mount Windows shared folder via network';
 	mkdir /media/www
