@@ -40,10 +40,23 @@ if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
         var_dump("Source folder {$srcDocRootPath} not found!");
         die;
     }
+    
+    //sync specific files from files change log if the log file isn't empty.
+    $syncFromListCMD = '';
+    $logFilename = 'file.changes.log';
+    $logFilePath = $srcDocRootPath . '/' . $logFilename;
+    if(file_exists($logFilePath) && filesize($logFilePath)){
+        $syncFromListCMD = "--files-from={$logFilePath}";
+    }
 
-    $cmd = "rsync -urhtP --exclude '.git' --exclude 'pub/media/*' --exclude 'var' --exclude 'silverstripe-cache' --info=stats2,name0,progress0 {$srcDocRootPath} {$destPath}";
+    $cmd = "rsync -urhtP $syncFromListCMD --exclude '.git' --exclude 'pub/media/*' --exclude 'var' --exclude 'silverstripe-cache' --info=stats2,name0,progress0 {$srcDocRootPath} {$destPath}";
 
     $sync_outputs = shell_exec($cmd);
+    
+    //clear files change log after sync
+    if(file_exists($logFilePath)){
+        file_put_contents($logFilePath, "");
+    }
     
     //write outputs to log file
     if(file_exists($destDocRootPath)){
