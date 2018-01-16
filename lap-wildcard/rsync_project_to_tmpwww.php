@@ -4,6 +4,8 @@ set_time_limit(0);
 
 $resyncVarName = 'tmpfs-resync';
 
+$redirectBackAfterSync = true;
+
 function setFinishedCookie(){
         setcookie("webdevsyncisdone", '1');
 }
@@ -64,10 +66,11 @@ if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
     }
     
     //write outputs to log file
+    $logContent = $_SERVER['REQUEST_URI'] . "\n" . "command : {$cmd}" . "\n" . $sync_outputs;
     if(file_exists($destDocRootPath)){
         file_put_contents(
             $destDocRootPath . '/tmpfs-sync.log', 
-            $_SERVER['REQUEST_URI'] . "\n" . "command : {$cmd}" . "\n" . $sync_outputs, 
+            $logContent, 
             FILE_APPEND
         );
     }else{
@@ -87,12 +90,25 @@ if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
         $uri = explode('?', $uri);
         $uri = $uri[0];
     }
+    
+    //check redirect var
+    if(isset( $_GET['webdev-no-redirect']) && $_GET['webdev-no-redirect']){
+        $redirectBackAfterSync = false;
+    }
 
-    $redirectBack = 'http://' . $_SERVER['HTTP_HOST'] . $uri;
-    
-    header("Webdev-Tmpfs-Sync-Message: finished");
-    
-    header('Location: ' . $redirectBack) ;
+    if($redirectBackAfterSync){
+        //redirect back to normal website address after sync.
+        $redirectBack = 'http://' . $_SERVER['HTTP_HOST'] . $uri;
+        
+        header("Webdev-Tmpfs-Sync-Message: finished");
+        
+        header('Location: ' . $redirectBack) ;
+    }else{
+        //no redirect. display sync summary on screen.
+        echo '<pre>';
+        echo $logContent;
+        die;
+    }
 }else{
     echo '$_SERVER["HTTP_HOST"] not found!';
 }
