@@ -12,6 +12,11 @@ if [ ! -d /media/www ] || [ "$(ls -A /media/www 2> /dev/null)" == "" ]; then
 	fi
 fi
 
+# If /tmpwww/ tmpfs folder exists, make sure it's open for everyone.
+if [ -d /tmpwww/ ]; then
+	chmod -R 777 /tmpwww/
+fi
+
 # Setup custom 'db' host IP
 if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
 	echo "No custom WEBDEV_DB_HOST_IP"
