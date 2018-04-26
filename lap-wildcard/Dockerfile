@@ -48,6 +48,7 @@ RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wil
 # Setup Webgrind - web based front-end xdebug profile information presentation tool
 ADD apache-phpwebgrind.conf /etc/apache2/conf-available/phpwebgrind.conf
 RUN mkdir /var/www/php/xdebug.profiler && \
+    chmod 777 /var/www/php/xdebug.profiler && \
 	cd /var/www/php && \
 	git clone https://github.com/jokkedk/webgrind.git webgrind && \
 	a2enconf phpwebgrind.conf
