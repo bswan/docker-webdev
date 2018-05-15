@@ -50,7 +50,7 @@ ADD apache-wildcard-php55-vhost.conf /etc/apache2/sites-available/006-wildcard-p
 # Default wildcard has lowest priority
 ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
-RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-tmpfs-php70-vhost.conf 111-wildcard-default.conf && \
+RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-tmpfs-php70-vhost.conf 111-wildcard-default.conf \
     004-wildcard-php53-vhost.conf 005-wildcard-php54-vhost.conf 006-wildcard-php55-vhost.conf
 
 ## Old php version fpm pools
