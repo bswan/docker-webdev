@@ -38,12 +38,25 @@ RUN chmod +x /var/www/php/rsync_project_to_tmpwww.php
 # Setup Apache wildcard vhost for multi PHP versions
 ADD apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/001-wildcard-php70-vhost.conf
 ADD apache-wildcard-php56-vhost.conf /etc/apache2/sites-available/002-wildcard-php56-vhost.conf
+
 # Setup Apache wildcard vhost for multi PHP versions
 ADD apache-wildcard-tmpfs-php70-vhost.conf /etc/apache2/sites-available/003-wildcard-tmpfs-php70-vhost.conf
+
+# Old PHP versions. 53, 54, 55
+ADD apache-wildcard-php53-vhost.conf /etc/apache2/sites-available/004-wildcard-php53-vhost.conf
+ADD apache-wildcard-php54-vhost.conf /etc/apache2/sites-available/005-wildcard-php54-vhost.conf
+ADD apache-wildcard-php55-vhost.conf /etc/apache2/sites-available/006-wildcard-php55-vhost.conf
+
 # Default wildcard has lowest priority
 ADD apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
-RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-tmpfs-php70-vhost.conf 111-wildcard-default.conf
+RUN a2ensite 001-wildcard-php70-vhost.conf 002-wildcard-php56-vhost.conf 003-wildcard-tmpfs-php70-vhost.conf 111-wildcard-default.conf && \
+    004-wildcard-php53-vhost.conf 005-wildcard-php54-vhost.conf 006-wildcard-php55-vhost.conf
+
+## Old php version fpm pools
+ADD config/php-fpm/php53-fpm-www.conf /etc/php53/fpm/pool.d/www.conf
+ADD config/php-fpm/php54-fpm-www.conf /etc/php54/fpm/pool.d/www.conf
+ADD config/php-fpm/php55-fpm-www.conf /etc/php55/fpm/pool.d/www.conf
 
 # Setup Webgrind - web based front-end xdebug profile information presentation tool
 ADD apache-phpwebgrind.conf /etc/apache2/conf-available/phpwebgrind.conf
