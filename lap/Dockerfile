@@ -47,7 +47,7 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.i
 	echo "date.timezone = Australia/Sydney" > /etc/php/7.0/fpm/conf.d/timezone.ini
 
 # Old PHP 5.3
-RUN apt-get -qqy install php53-cli php53-fpm php53-pecl php53-common php53-mod-curl php53-mod-dom php53-mod-exif php53-mod-fileinfo php53-mod-gd php53-mod-mbstring php53-mod-gettext php53-mod-mysql php53-mod-ftp php53-mod-simplexml php53-mod-xmlreader php53-mod-xmlwriter php53-mod-tokenizer php53-mod-intl php53-mod-soap php53-mod-json
+RUN apt-get -qqy install php53-cli php53-fpm php53-pecl php53-common php53-mod-openssl php53-mod-curl php53-mod-dom php53-mod-exif php53-mod-fileinfo php53-mod-gd php53-mod-mbstring php53-mod-gettext php53-mod-mysql php53-mod-ftp php53-mod-simplexml php53-mod-xmlreader php53-mod-xmlwriter php53-mod-tokenizer php53-mod-intl php53-mod-soap php53-mod-json
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php53/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php53/fpm/conf.d/timezone.ini
@@ -56,7 +56,7 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php53/cli/conf.d/timezone.ini
 RUN sed -i -e 's/#ENABLE=true/ENABLE=true/g' /etc/default/php53-fpm
 
 # Old PHP 5.4
-RUN apt-get -qqy install php54-cli php54-fpm php54-pecl php54-common php54-mod-curl php54-mod-dom php54-mod-exif php54-mod-fileinfo php54-mod-gd php54-mod-mbstring php54-mod-gettext php54-mod-mysql php54-mod-ftp php54-mod-simplexml php54-mod-xmlreader php54-mod-xmlwriter php54-mod-tokenizer php54-mod-intl php54-mod-soap php54-mod-json
+RUN apt-get -qqy install php54-cli php54-fpm php54-pecl php54-common php54-mod-openssl php54-mod-curl php54-mod-dom php54-mod-exif php54-mod-fileinfo php54-mod-gd php54-mod-mbstring php54-mod-gettext php54-mod-mysql php54-mod-ftp php54-mod-simplexml php54-mod-xmlreader php54-mod-xmlwriter php54-mod-tokenizer php54-mod-intl php54-mod-soap php54-mod-json
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php54/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php54/fpm/conf.d/timezone.ini
@@ -65,7 +65,7 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php54/cli/conf.d/timezone.ini
 RUN sed -i -e 's/#ENABLE=true/ENABLE=true/g' /etc/default/php54-fpm
 
 # Old PHP 5.5
-RUN apt-get -qqy install php55-cli php55-fpm php55-pecl php55-common php55-mod-curl php55-mod-dom php55-mod-exif php55-mod-fileinfo php55-mod-gd php55-mod-mbstring php55-mod-gettext php55-mod-mysql php55-mod-ftp php55-mod-simplexml php55-mod-xmlreader php55-mod-xmlwriter php55-mod-tokenizer php55-mod-intl php55-mod-soap php55-mod-json
+RUN apt-get -qqy install php55-cli php55-fpm php55-pecl php55-common php55-mod-openssl php55-mod-curl php55-mod-dom php55-mod-exif php55-mod-fileinfo php55-mod-gd php55-mod-mbstring php55-mod-gettext php55-mod-mysql php55-mod-ftp php55-mod-simplexml php55-mod-xmlreader php55-mod-xmlwriter php55-mod-tokenizer php55-mod-intl php55-mod-soap php55-mod-json
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php55/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php55/fpm/conf.d/timezone.ini
