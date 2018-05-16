@@ -17,11 +17,11 @@ RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini 
 #RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9070~g' /etc/php/7.0/fpm/php.ini
 
 ### Apache Configuration
-RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers
+RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers env
 
-# Setup Apache permission for shared folder /media/www/
-ADD apache-shared-workplace-folder.conf /etc/apache2/conf-available/shared-workplace-folder.conf
-RUN a2enconf shared-workplace-folder.conf
+# Setup Apache config for webdev server
+ADD webdev.conf /etc/apache2/conf-available/webdev.conf
+RUN a2enconf webdev.conf
 
 # Setup /phpinfo alias
 RUN mkdir /var/www/php/ && \
