@@ -71,6 +71,21 @@ if [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
 	service php7.0-fpm start
 fi
 
+# Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
+if [ -z ${WEBDEV_POSTFIX_RELAYHOST+x} ]; then
+    echo "";
+else
+    echo "Update postfix config to use relayhost - '$WEBDEV_POSTFIX_RELAYHOST'";
+    sed -i -e "s~relayhost =.*$~relayhost = $WEBDEV_POSTFIX_RELAYHOST~g" /etc/postfix/main.cf
+    service postfix start
+fi
+
+################################
+#
+# Following are copied from https://github.com/lestrrat/docker-apache-php7-alpine/blob/master/apache2-foreground
+#
+################################
+
 echo "==============Starting Apache..."
 # Note: we don't just use "apache2ctl" here because it itself is just a shell-script wrapper around apache2 which provides extra functionality like "apache2ctl start" for launching apache2 in the background.
 # (also, when run as "apache2ctl <apache args>", it does not use "exec", which leaves an undesirable resident shell process)

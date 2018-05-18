@@ -88,5 +88,6 @@ ENV WEBDEV_REMOTE_HOST_IP		192.168.99.1
 ENV WEBDEV_CIFS_HOST_FOLDER 	//192.168.99.1/www
 ENV WEBDEV_CIFS_USER 			container
 ENV WEBDEV_CIFS_PW 				container123
+ENV WEBDEV_POSTFIX_RELAYHOST    [mailhog]:1025
 
 CMD ["/usr/local/bin/apache-foreground.sh"]
