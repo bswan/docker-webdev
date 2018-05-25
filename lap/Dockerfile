@@ -34,17 +34,29 @@ RUN apt-get -qq update
 
 RUN apt-get -qqy upgrade
 
+# PHP 7.2
+RUN apt-get -qqy install php7.2 php7.2-cli php7.2-fpm php7.2-mysql php7.2-curl php7.2-soap php7.2-common php7.2-gd php7.2-mcrypt php7.2-tidy php7.2-mbstring php7.2-xml php7.2-intl php7.2-memcache php7.2-yaml php7.2-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.2/cli/conf.d/timezone.ini && \
+	echo "date.timezone = Australia/Sydney" > /etc/php/7.2/fpm/conf.d/timezone.ini
+	
+# PHP 7.1
+RUN apt-get -qqy install php7.1 php7.1-cli php7.1-fpm php7.1-mysql php7.1-curl php7.1-soap php7.1-common php7.1-gd php7.1-mcrypt php7.1-tidy php7.1-mbstring php7.1-xml php7.1-intl php7.1-memcache php7.1-yaml php7.1-zip
+	
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.1/cli/conf.d/timezone.ini && \
+	echo "date.timezone = Australia/Sydney" > /etc/php/7.1/fpm/conf.d/timezone.ini
+
+# PHP 7.0
+RUN apt-get -qqy install php7.0 php7.0-cli php7.0-fpm php7.0-mysql php7.0-curl php7.0-soap php7.0-common php7.0-gd php7.0-mcrypt php7.0-tidy php7.0-mbstring php7.0-xml php7.0-intl php7.0-memcache php7.0-yaml php7.0-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.ini && \
+	echo "date.timezone = Australia/Sydney" > /etc/php/7.0/fpm/conf.d/timezone.ini
+
 # PHP 5.6
 RUN apt-get -qqy install php5.6 php5.6-cli php5.6-fpm php5.6-mysql php5.6-common php5.6-curl php5.6-soap php5.6-gd php5.6-mcrypt php5.6-tidy php5.6-mbstring php5.6-xml php5.6-intl php5.6-memcache php5.6-yaml php5.6-zip
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php/5.6/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php/5.6/fpm/conf.d/timezone.ini
-	
-# PHP 7.0
-RUN apt-get -qqy install php7.0 php7.0-cli php7.0-fpm php7.0-mysql php7.0-curl php7.0-soap php7.0-common php7.0-gd php7.0-mcrypt php7.0-tidy php7.0-mbstring php7.0-xml php7.0-intl php7.0-memcache php7.0-yaml php7.0-zip
-	
-RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.0/cli/conf.d/timezone.ini && \
-	echo "date.timezone = Australia/Sydney" > /etc/php/7.0/fpm/conf.d/timezone.ini
 
 # Old PHP 5.3
 RUN apt-get -qqy install php53-cli php53-fpm php53-pecl php53-common php53-mod-openssl php53-mod-curl php53-mod-dom php53-mod-exif php53-mod-fileinfo php53-mod-gd php53-mod-mbstring php53-mod-gettext php53-mod-mysql php53-mod-ftp php53-mod-simplexml php53-mod-xmlreader php53-mod-xmlwriter php53-mod-tokenizer php53-mod-intl php53-mod-soap php53-mod-json
