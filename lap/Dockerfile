@@ -35,7 +35,7 @@ RUN apt-get -qq update
 RUN apt-get -qqy upgrade
 
 # PHP 7.2
-RUN apt-get -qqy install php7.2 php7.2-cli php7.2-fpm php7.2-mysql php7.2-curl php7.2-soap php7.2-common php7.2-gd php7.2-mcrypt php7.2-tidy php7.2-mbstring php7.2-xml php7.2-intl php7.2-memcache php7.2-yaml php7.2-zip
+RUN apt-get -qqy install php7.2 php7.2-cli php7.2-fpm php7.2-mysql php7.2-curl php7.2-soap php7.2-common php7.2-gd php7.2-tidy php7.2-mbstring php7.2-xml php7.2-intl php7.2-memcache php7.2-yaml php7.2-zip
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.2/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php/7.2/fpm/conf.d/timezone.ini
