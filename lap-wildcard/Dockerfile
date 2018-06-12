@@ -53,15 +53,15 @@ ADD config/apache/sites/apache-wildcard-php55-vhost.conf /etc/apache2/sites-avai
 ADD config/apache/sites/apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
 RUN a2ensite \
+    001-wildcard-php72-vhost.conf \
+    001-wildcard-php71-vhost.conf \
     001-wildcard-php70-vhost.conf \
     002-wildcard-php56-vhost.conf \
     003-wildcard-tmpfs-php70-vhost.conf \
     111-wildcard-default.conf \
     004-wildcard-php53-vhost.conf \
     005-wildcard-php54-vhost.conf \
-    006-wildcard-php55-vhost.conf \
-    007-wildcard-php71-vhost.conf \
-    008-wildcard-php72-vhost.conf \
+    006-wildcard-php55-vhost.conf
 
 ## Old php version fpm pools
 ADD config/php/fpm/php53-fpm-www.conf /etc/php53/fpm/pool.d/www.conf
