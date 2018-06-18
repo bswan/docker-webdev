@@ -32,7 +32,12 @@ if(!is_writable($destPath)){
 }
 
 if(isset( $_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']){
-    $docRootName = explode('.tmpfs.webdev', $_SERVER['HTTP_HOST']);
+    if(stripos($_SERVER['HTTP_HOST'], '.webdev') !== false){
+        $docRootName = explode('.tmpfs.webdev', $_SERVER['HTTP_HOST']);
+    }else{
+        $docRootName = explode('.tmpfs.local', $_SERVER['HTTP_HOST']);
+    }
+
     $docRootName = $docRootName[0];
 
     $destDocRootPath = $destPath . $docRootName;
