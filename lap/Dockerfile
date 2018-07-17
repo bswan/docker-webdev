@@ -7,15 +7,11 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
 	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
 	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
-### Blackfire Debian repo setup
-RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
-    echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
-
 ### SET UP
 RUN apt-get -qq update
 
 # Supporting tools
-RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils mariadb-client
+RUN apt-get -qqy install sudo tee wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils mariadb-client
 
 RUN echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
 	echo "en_US.UTF-8 UTF-8\n" > /etc/locale.gen && \
@@ -23,7 +19,7 @@ RUN echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
 	
 ENV ENV LANG en_US.UTF-8
 
-# APACHE 
+# APACHE
 RUN apt-get -qqy install apache2 
 
 ## Stable PHP Versions - 5.6 | 7.0 | 7.1 | 7,2
@@ -129,5 +125,9 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - && \
 	apt-get install -qqy nodejs && \
 	npm install -g grunt-cli gulp bower
 
-# Blackfire (PHP profiling) - install agent & PHP Probe
+# Blackfire Debian repo setup
+RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
+    echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
+
+## Blackfire (PHP profiling) - install agent & PHP Probe
 RUN apt-get -qqy install blackfire-agent blackfire-php
