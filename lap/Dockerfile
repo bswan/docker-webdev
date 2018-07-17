@@ -7,6 +7,10 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
 	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
 	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
+### Blackfire Debian repo setup
+RUN wget -q -O - https://packagecloud.io/gpg.key | sudo apt-key add - && \
+    echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
+
 ### SET UP
 RUN apt-get -qq update
 
@@ -124,3 +128,6 @@ RUN wget https://getcomposer.org/composer.phar && \
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - && \
 	apt-get install -qqy nodejs && \
 	npm install -g grunt-cli gulp bower
+
+# Blackfire (PHP profiling) - install agent & PHP Probe
+RUN apt-get -qqy install blackfire-agent blackfire-php

@@ -35,6 +35,14 @@ echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmy
 echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin/config.inc.php
 echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 
+# Update Blackfire agent & client & start service
+rm /etc/blackfire/agent
+rm /root/.blackfire.ini
+if [ "BLACKFIRE_SERVER_ID" != "" ] && [ "BLACKFIRE_SERVER_TOKEN" != "" ] && [ "BLACKFIRE_CLIENT_ID" != "" ] && [ "BLACKFIRE_CLIENT_TOKEN" != "" ]; then
+    blackfire-agent -register <<< $"$BLACKFIRE_SERVER_ID\n$BLACKFIRE_SERVER_TOKEN\n"
+    blackfire config <<< $"$BLACKFIRE_CLIENT_ID\n$BLACKFIRE_CLIENT_TOKEN\n"
+fi
+
 # Update PHP xdebug.remote_host IP
 if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
 	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
