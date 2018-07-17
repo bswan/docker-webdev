@@ -8,8 +8,8 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
 	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
 ### Blackfire Debian repo setup
-RUN wget -q -O - https://packagecloud.io/gpg.key | sudo apt-key add - && \
-    echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
+RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
+    echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
 
 ### SET UP
 RUN apt-get -qq update
