@@ -4,11 +4,12 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ### PHP Configuration
 # Install xdebug for PHP 5.6+
-RUN apt-get install php-xdebug
+RUN apt-get -y update
+RUN apt-get -y install php-xdebug
 
-# Add custom PHP 5.6 | 7.0 | 7.1 | 7.2 config
+# Add custom PHP 5.6 | 7.0 | 7.1 | 7.2 | 7.3 config
 ADD config/php/webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
-RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini /etc/php/7.1/fpm/php.ini /etc/php/7.2/fpm/php.ini
+RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini /etc/php/7.1/fpm/php.ini /etc/php/7.2/fpm/php.ini /etc/php/7.3/fpm/php.ini
 
 # Specific config for php 5.6
 #RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9056~g' /etc/php/5.6/fpm/php.ini
@@ -36,6 +37,7 @@ ADD rsync_project_to_tmpwww.php /var/www/php/rsync_project_to_tmpwww.php
 RUN chmod +x /var/www/php/rsync_project_to_tmpwww.php
 
 # Setup Apache wildcard vhost for multi PHP versions
+ADD config/apache/sites/apache-wildcard-php73-vhost.conf /etc/apache2/sites-available/001-wildcard-php73-vhost.conf
 ADD config/apache/sites/apache-wildcard-php72-vhost.conf /etc/apache2/sites-available/001-wildcard-php72-vhost.conf
 ADD config/apache/sites/apache-wildcard-php71-vhost.conf /etc/apache2/sites-available/001-wildcard-php71-vhost.conf
 ADD config/apache/sites/apache-wildcard-php70-vhost.conf /etc/apache2/sites-available/001-wildcard-php70-vhost.conf
@@ -53,6 +55,7 @@ ADD config/apache/sites/apache-wildcard-php55-vhost.conf /etc/apache2/sites-avai
 ADD config/apache/sites/apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
 RUN a2ensite \
+    001-wildcard-php73-vhost.conf \
     001-wildcard-php72-vhost.conf \
     001-wildcard-php71-vhost.conf \
     001-wildcard-php70-vhost.conf \
@@ -96,6 +99,7 @@ ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
 ENV WEBDEV_ENABLE_PHP_71_FPM 	0
 ENV WEBDEV_ENABLE_PHP_72_FPM 	1
+ENV WEBDEV_ENABLE_PHP_73_FPM 	0
 ENV WEBDEV_REMOTE_HOST_IP		192.168.99.1
 ENV WEBDEV_CIFS_HOST_FOLDER 	//192.168.99.1/www
 ENV WEBDEV_CIFS_SMB_VERSION 	2.0

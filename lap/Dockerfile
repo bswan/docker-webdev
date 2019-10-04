@@ -34,6 +34,12 @@ RUN apt-get -qq update
 
 RUN apt-get -qqy upgrade
 
+# PHP 7.3
+RUN apt-get -qqy install php7.3 php7.3-cli php7.3-fpm php7.3-mysql php7.3-curl php7.3-soap php7.3-common php7.3-gd php7.3-tidy php7.3-mbstring php7.3-xml php7.3-intl php7.3-memcache php7.3-yaml php7.3-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.3/cli/conf.d/timezone.ini && \
+	echo "date.timezone = Australia/Sydney" > /etc/php/7.3/fpm/conf.d/timezone.ini
+
 # PHP 7.2
 RUN apt-get -qqy install php7.2 php7.2-cli php7.2-fpm php7.2-mysql php7.2-curl php7.2-soap php7.2-common php7.2-gd php7.2-tidy php7.2-mbstring php7.2-xml php7.2-intl php7.2-memcache php7.2-yaml php7.2-zip
 
@@ -130,4 +136,4 @@ RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
     echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
 
 ## Blackfire (PHP profiling) - install agent & PHP Probe
-RUN apt-get -qq update && apt-get -qqy install blackfire-agent blackfire-php
+RUN apt-get -qq update && apt-get -qqy install -y --allow-unauthenticated blackfire-agent blackfire-php
