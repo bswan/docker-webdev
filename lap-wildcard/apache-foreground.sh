@@ -91,7 +91,7 @@ if [ "$WEBDEV_ENABLE_PHP_72_FPM" = 1 ]; then
 	service php7.2-fpm start
 fi
 
-# Only start PHP 7.3 FPM if WEBDEV_ENABLE_PHP_72_FPM is 1
+# Only start PHP 7.3 FPM if WEBDEV_ENABLE_PHP_73_FPM is 1
 if [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
 	echo "==============Starting PHP 7.3 FPM..."
 	service php7.3-fpm start
