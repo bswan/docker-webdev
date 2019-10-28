@@ -91,6 +91,12 @@ if [ "$WEBDEV_ENABLE_PHP_72_FPM" = 1 ]; then
 	service php7.2-fpm start
 fi
 
+# Only start PHP 7.3 FPM if WEBDEV_ENABLE_PHP_73_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
+	echo "==============Starting PHP 7.3 FPM..."
+	service php7.3-fpm start
+fi
+
 # Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
 if [ -z ${WEBDEV_POSTFIX_RELAYHOST+x} ]; then
     echo "";
