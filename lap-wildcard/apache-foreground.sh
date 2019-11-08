@@ -35,6 +35,36 @@ echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmy
 echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin/config.inc.php
 echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 
+## setup phpmyadmin config to use correct php.fpm handler, depending on php version set
+# Remove old phpmyadmin handler config
+sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/conf-enabled/phpmyadmin.conf
+# Set new phpmyadmin handler config: /etc/apache2/conf-enabled/phpmyadmin.conf
+if [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin handler to 7.3 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_72_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 7.2 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.2-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_71_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 7.1 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 7.0 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.0-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_56_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.6 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.6-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_55_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.5 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.5-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_54_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.4 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.4-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_53_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.3 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.3-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+fi
+
 # Update Blackfire agent & client & start service
 rm /etc/blackfire/agent
 rm /root/.blackfire.ini
