@@ -34,6 +34,12 @@ RUN apt-get -qq update
 
 RUN apt-get -qqy upgrade
 
+# PHP 7.4
+RUN apt-get -qqy install php7.4 php7.4-cli php7.4-fpm php7.4-mysql php7.4-curl php7.4-soap php7.4-common php7.4-gd php7.4-tidy php7.4-mbstring php7.4-xml php7.4-intl php7.4-memcache php7.4-yaml php7.4-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.4/cli/conf.d/timezone.ini && \
+	echo "date.timezone = Australia/Sydney" > /etc/php/7.4/fpm/conf.d/timezone.ini
+
 # PHP 7.3
 RUN apt-get -qqy install php7.3 php7.3-cli php7.3-fpm php7.3-mysql php7.3-curl php7.3-soap php7.3-common php7.3-gd php7.3-tidy php7.3-mbstring php7.3-xml php7.3-intl php7.3-memcache php7.3-yaml php7.3-zip
 

@@ -39,7 +39,10 @@ echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 # Remove old phpmyadmin handler config
 sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/conf-enabled/phpmyadmin.conf
 # Set new phpmyadmin handler config: /etc/apache2/conf-enabled/phpmyadmin.conf
-if [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
+if [ "$WEBDEV_ENABLE_PHP_74_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin handler to 7.4 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.4-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
 	echo "==============Setting phpMyAdmin handler to 7.3 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 elif [ "$WEBDEV_ENABLE_PHP_72_FPM" = 1 ]; then
@@ -125,6 +128,12 @@ fi
 if [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
 	echo "==============Starting PHP 7.3 FPM..."
 	service php7.3-fpm start
+fi
+
+# Only start PHP 7.4 FPM if WEBDEV_ENABLE_PHP_74_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_74_FPM" = 1 ]; then
+	echo "==============Starting PHP 7.4 FPM..."
+	service php7.4-fpm start
 fi
 
 # Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
