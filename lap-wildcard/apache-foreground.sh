@@ -2,8 +2,20 @@
 
 # CIFS config for Windows
 # Mount CIFS folder if not exists (Mac might use bind mount on /media/www)
+
+	echo '==Checking if folder needs to be mounted';
+
 if [ ! -d /media/www ] || [ "$(ls -A /media/www 2> /dev/null)" == "" ]; then
-	echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8  0  0" > /etc/fstab
+	echo '==Folder needs to be mounted because media www folder is empty';
+
+	# On some computers mount with no vers flag will break while on some computers if there is a vers flag, it will also break
+	# Give user choice to define whether they want to use the ver flag
+    if [ "WEBDEV_CIFS_SMB_VERSION" = 2 ]; then
+	    echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  vers=$WEBDEV_CIFS_SMB_VERSION,uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8,sec=ntlm  0  0" > /etc/fstab
+    else
+    	echo "$WEBDEV_CIFS_HOST_FOLDER  /media/www  cifs  uid=www-data,gid=www-data,file_mode=0777,dir_mode=0777,username=$WEBDEV_CIFS_USER,password=$WEBDEV_CIFS_PW,iocharset=utf8  0  0" > /etc/fstab
+    fi
+
 	echo '==Going to mount Windows shared folder via network';
 	mkdir /media/www
 	mount -a
