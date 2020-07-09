@@ -118,10 +118,10 @@ RUN echo "webdev is ok" > /var/www/html/index.html
 # Setup phpmyadmin
 ADD apache-phpmyadmin.conf /etc/apache2/conf-available/phpmyadmin.conf
 
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.4/phpMyAdmin-4.7.4-all-languages.tar.gz && \
-	tar xzf phpMyAdmin-4.7.4-all-languages.tar.gz -C /opt && \
-	rm phpMyAdmin-4.7.4-all-languages.tar.gz && \
-	mv /opt/phpMyAdmin-4.7.4-all-languages /opt/phpmyadmin && \
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz && \
+	tar xzf phpMyAdmin-5.0.2-all-languages.tar.gz -C /opt && \
+	rm phpMyAdmin-5.0.2-all-languages.tar.gz && \
+	mv /opt/phpMyAdmin-5.0.2-all-languages /opt/phpmyadmin && \
 	a2enconf phpmyadmin.conf
 	
 # Add default phpmyadmin config
