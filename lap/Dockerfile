@@ -137,6 +137,11 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - && \
 	apt-get install -qqy nodejs && \
 	npm install -g grunt-cli gulp bower
 
+# install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+apt update && apt install yarn
+
 # Blackfire Debian repo setup
 RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
     echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
