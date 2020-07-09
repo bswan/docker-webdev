@@ -83,10 +83,10 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php53/cli/conf.d/timezone.ini
 RUN sed -i -e 's/#ENABLE=true/ENABLE=true/g' /etc/default/php53-fpm
 
 ## PHP53 zip.so
-RUN pecl53 install zip
-RUN echo "extension=zip.so" > /etc/php53/conf.d/zip.ini && \
-    ln -s /etc/php53/conf.d/zip.ini /etc/php53/cli/conf.d/zip.ini && \
-    ln -s /etc/php53/conf.d/zip.ini /etc/php53/fpm/conf.d/zip.ini
+#RUN pecl53 install zip
+#RUN echo "extension=zip.so" > /etc/php53/conf.d/zip.ini && \
+#    ln -s /etc/php53/conf.d/zip.ini /etc/php53/cli/conf.d/zip.ini && \
+#    ln -s /etc/php53/conf.d/zip.ini /etc/php53/fpm/conf.d/zip.ini
 
 # Old PHP 5.4
 RUN apt-get -qqy install php54-cli php54-fpm php54-pecl php54-common php54-mod-openssl php54-mod-curl php54-mod-dom php54-mod-exif php54-mod-fileinfo php54-mod-gd php54-mod-mbstring php54-mod-gettext php54-mod-mysql php54-mod-ftp php54-mod-simplexml php54-mod-xmlreader php54-mod-xmlwriter php54-mod-tokenizer php54-mod-intl php54-mod-soap php54-mod-json
