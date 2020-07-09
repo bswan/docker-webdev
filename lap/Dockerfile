@@ -142,4 +142,6 @@ RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
     echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
 
 ## Blackfire (PHP profiling) - install agent & PHP Probe
-RUN apt-get -qq update && apt-get -qqy install -y --allow-unauthenticated blackfire-agent blackfire-php
+RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - && \
+echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list && \
+apt update && apt install blackfire-agent blackfire-php
