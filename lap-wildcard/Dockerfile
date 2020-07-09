@@ -1,5 +1,5 @@
 FROM internetrix/webdev:lap
-MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
+MAINTAINER Jonathon Su <jonathon.su@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
 ### PHP Configuration

@@ -1,5 +1,5 @@
-FROM ubuntu:16.04
-MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
+FROM ubuntu:20.04
+MAINTAINER Jonathon Su <jonathon.su@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
 ### Change to default mirror to AU mirror - https://wiki.ubuntu.com/AustralianTeam/LocalAptMirrors#Australian_Mirrors
