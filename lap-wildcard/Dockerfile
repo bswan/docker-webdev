@@ -11,12 +11,6 @@ RUN apt-get -y install php-xdebug
 ADD config/php/webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
 RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini /etc/php/7.1/fpm/php.ini /etc/php/7.2/fpm/php.ini /etc/php/7.3/fpm/php.ini /etc/php/7.4/fpm/php.ini
 
-# Specific config for php 5.6
-#RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9056~g' /etc/php/5.6/fpm/php.ini
-
-# Specific config for php 7.0
-#RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9070~g' /etc/php/7.0/fpm/php.ini
-
 ### Apache Configuration
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers env
 
@@ -58,7 +52,7 @@ RUN a2ensite \
     001-wildcard-php70-vhost.conf \
     002-wildcard-php56-vhost.conf \
     003-wildcard-tmpfs-php70-vhost.conf \
-    111-wildcard-default.conf \
+    111-wildcard-default.conf
 
 # Setup Webgrind - web based front-end xdebug profile information presentation tool
 ADD config/apache/conf/apache-phpwebgrind.conf /etc/apache2/conf-available/phpwebgrind.conf
