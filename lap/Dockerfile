@@ -80,6 +80,7 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-lang
 	
 # Add default phpmyadmin config
 ADD phpmyadmin.config.inc.php /opt/phpmyadmin/config.inc.php
+RUN mkdir /opt/phpmyadmin/tmp
 
 # Composer
 RUN wget https://getcomposer.org/composer.phar && \
@@ -88,8 +89,7 @@ RUN wget https://getcomposer.org/composer.phar && \
 	
 # NodeJS and common global NPM modules
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-	apt-get install -qqy nodejs && \
-	npm install -g grunt-cli gulp bower
+	apt-get install -qqy nodejs
 
 # install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
