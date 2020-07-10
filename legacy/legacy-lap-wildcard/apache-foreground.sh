@@ -73,6 +73,15 @@ elif [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
 elif [ "$WEBDEV_ENABLE_PHP_56_FPM" = 1 ]; then
 	echo "==============Setting phpMyAdmin socket to 5.6 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.6-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_55_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.5 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.5-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_54_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.4 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.4-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_53_FPM" = 1 ]; then
+	echo "==============Setting phpMyAdmin socket to 5.3 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.3-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 fi
 
 # Update Blackfire agent & client & start service
@@ -87,6 +96,24 @@ fi
 if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
 	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
 	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini 
+fi
+
+# Only start PHP 5.3 FPM if WEBDEV_ENABLE_PHP_53_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_53_FPM" = 1 ]; then
+	echo "==============Starting PHP 5.3 FPM..."
+	service php53-fpm start
+fi
+
+# Only start PHP 5.4 FPM if WEBDEV_ENABLE_PHP_54_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_54_FPM" = 1 ]; then
+	echo "==============Starting PHP 5.4 FPM..."
+	service php54-fpm start
+fi
+
+# Only start PHP 5.5 FPM if WEBDEV_ENABLE_PHP_55_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_55_FPM" = 1 ]; then
+	echo "==============Starting PHP 5.5 FPM..."
+	service php55-fpm start
 fi
 
 # Only start PHP 5.6 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1

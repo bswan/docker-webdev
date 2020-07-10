@@ -1,5 +1,5 @@
 FROM perl:5.26
-MAINTAINER Jason Zhang <jason.zhang@internetrix.com.au>
+MAINTAINER Jonathon Su <jonathon.su@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
 ### SET UP

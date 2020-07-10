@@ -11,6 +11,12 @@ RUN apt-get -y install php-xdebug
 ADD config/php/webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
 RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini /etc/php/7.1/fpm/php.ini /etc/php/7.2/fpm/php.ini /etc/php/7.3/fpm/php.ini /etc/php/7.4/fpm/php.ini
 
+# Specific config for php 5.6
+#RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9056~g' /etc/php/5.6/fpm/php.ini
+
+# Specific config for php 7.0
+#RUN sed -i -e 's~xdebug.remote_port=[0-9]*~xdebug.remote_port=9070~g' /etc/php/7.0/fpm/php.ini
+
 ### Apache Configuration
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers env
 
@@ -41,6 +47,11 @@ ADD config/apache/sites/apache-wildcard-php56-vhost.conf /etc/apache2/sites-avai
 # Setup Apache wildcard vhost for multi PHP versions
 ADD config/apache/sites/apache-wildcard-tmpfs-php70-vhost.conf /etc/apache2/sites-available/003-wildcard-tmpfs-php70-vhost.conf
 
+# Old PHP versions. 53, 54, 55
+ADD config/apache/sites/apache-wildcard-php53-vhost.conf /etc/apache2/sites-available/004-wildcard-php53-vhost.conf
+ADD config/apache/sites/apache-wildcard-php54-vhost.conf /etc/apache2/sites-available/005-wildcard-php54-vhost.conf
+ADD config/apache/sites/apache-wildcard-php55-vhost.conf /etc/apache2/sites-available/006-wildcard-php55-vhost.conf
+
 # Default wildcard has lowest priority
 ADD config/apache/sites/apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
@@ -52,7 +63,15 @@ RUN a2ensite \
     001-wildcard-php70-vhost.conf \
     002-wildcard-php56-vhost.conf \
     003-wildcard-tmpfs-php70-vhost.conf \
-    111-wildcard-default.conf
+    111-wildcard-default.conf \
+    004-wildcard-php53-vhost.conf \
+    005-wildcard-php54-vhost.conf \
+    006-wildcard-php55-vhost.conf
+
+## Old php version fpm pools
+ADD config/php/fpm/php53-fpm-www.conf /etc/php53/fpm/pool.d/www.conf
+ADD config/php/fpm/php54-fpm-www.conf /etc/php54/fpm/pool.d/www.conf
+ADD config/php/fpm/php55-fpm-www.conf /etc/php55/fpm/pool.d/www.conf
 
 # Setup Webgrind - web based front-end xdebug profile information presentation tool
 ADD config/apache/conf/apache-phpwebgrind.conf /etc/apache2/conf-available/phpwebgrind.conf
@@ -75,12 +94,15 @@ EXPOSE 80 443
 ENV WEBDEV_PHPMYADMIN_DB_HOST 	mariadb
 ENV WEBDEV_PHPMYADMIN_DB_USER 	root
 ENV WEBDEV_PHPMYADMIN_DB_PW 	root123
+ENV WEBDEV_ENABLE_PHP_53_FPM 	0
+ENV WEBDEV_ENABLE_PHP_54_FPM 	0
+ENV WEBDEV_ENABLE_PHP_55_FPM 	0
 ENV WEBDEV_ENABLE_PHP_56_FPM 	1
 ENV WEBDEV_ENABLE_PHP_70_FPM 	1
 ENV WEBDEV_ENABLE_PHP_71_FPM 	0
 ENV WEBDEV_ENABLE_PHP_72_FPM 	1
-ENV WEBDEV_ENABLE_PHP_73_FPM 	1
-ENV WEBDEV_ENABLE_PHP_74_FPM 	1
+ENV WEBDEV_ENABLE_PHP_73_FPM 	0
+ENV WEBDEV_ENABLE_PHP_74_FPM 	0
 ENV WEBDEV_REMOTE_HOST_IP		192.168.99.1
 ENV WEBDEV_CIFS_HOST_FOLDER 	//192.168.99.1/www
 ENV WEBDEV_CIFS_SMB_VERSION 	3.0
