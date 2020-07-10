@@ -87,7 +87,7 @@ RUN wget https://getcomposer.org/composer.phar && \
 	mv composer.phar /usr/local/bin/composer
 	
 # NodeJS and common global NPM modules
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 	apt-get install -qqy nodejs && \
 	npm install -g grunt-cli gulp bower
 
