@@ -16,11 +16,11 @@ RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip
 RUN echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
 	echo "en_US.UTF-8 UTF-8\n" > /etc/locale.gen && \
 	locale-gen
-	
+
 ENV ENV LANG en_US.UTF-8
 
 # APACHE
-RUN apt-get -qqy install apache2 
+RUN apt-get -qqy install apache2
 
 ## Stable PHP Versions - 5.6 | 7.0 | 7.1 | 7,2
 RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
@@ -28,6 +28,12 @@ RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
 RUN apt-get -qq update
 
 RUN apt-get -qqy upgrade
+
+# PHP 8.0
+RUN apt-get -qqy install php8.0 php8.0-cli php8.0-fpm php8.0-mysql php8.0-curl php8.0-soap php8.0-common php8.0-gd php8.0-tidy php8.0-mbstring php8.0-xml php8.0-intl php8.0-memcache php8.0-yaml php8.0-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/8.0/cli/conf.d/timezone.ini && \
+    echo "date.timezone = Australia/Sydney" > /etc/php/8.0/fpm/conf.d/timezone.ini
 
 # PHP 7.4
 RUN apt-get -qqy install php7.4 php7.4-cli php7.4-fpm php7.4-mysql php7.4-curl php7.4-soap php7.4-common php7.4-gd php7.4-tidy php7.4-mbstring php7.4-xml php7.4-intl php7.4-memcache php7.4-yaml php7.4-zip
@@ -46,10 +52,10 @@ RUN apt-get -qqy install php7.2 php7.2-cli php7.2-fpm php7.2-mysql php7.2-curl p
 
 RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.2/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php/7.2/fpm/conf.d/timezone.ini
-	
+
 # PHP 7.1
 RUN apt-get -qqy install php7.1 php7.1-cli php7.1-fpm php7.1-mysql php7.1-curl php7.1-soap php7.1-common php7.1-gd php7.1-mcrypt php7.1-tidy php7.1-mbstring php7.1-xml php7.1-intl php7.1-memcache php7.1-yaml php7.1-zip
-	
+
 RUN echo "date.timezone = Australia/Sydney" > /etc/php/7.1/cli/conf.d/timezone.ini && \
 	echo "date.timezone = Australia/Sydney" > /etc/php/7.1/fpm/conf.d/timezone.ini
 
@@ -67,7 +73,7 @@ RUN echo "date.timezone = Australia/Sydney" > /etc/php/5.6/cli/conf.d/timezone.i
 
 
 # Apache & PHP Configuration
-RUN echo "webdev is ok" > /var/www/html/index.html 
+RUN echo "webdev is ok" > /var/www/html/index.html
 
 # Setup phpmyadmin
 ADD apache-phpmyadmin.conf /etc/apache2/conf-available/phpmyadmin.conf
@@ -77,7 +83,7 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-lang
 	rm phpMyAdmin-5.0.2-all-languages.tar.gz && \
 	mv /opt/phpMyAdmin-5.0.2-all-languages /opt/phpmyadmin && \
 	a2enconf phpmyadmin.conf
-	
+
 # Add default phpmyadmin config
 ADD phpmyadmin.config.inc.php /opt/phpmyadmin/config.inc.php
 RUN mkdir /opt/phpmyadmin/tmp
@@ -86,7 +92,7 @@ RUN mkdir /opt/phpmyadmin/tmp
 RUN wget https://getcomposer.org/composer.phar && \
 	chmod +x composer.phar && \
 	mv composer.phar /usr/local/bin/composer
-	
+
 # NodeJS and common global NPM modules
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 	apt-get install -qqy nodejs

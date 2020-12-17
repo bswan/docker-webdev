@@ -55,7 +55,10 @@ echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 # Remove old phpmyadmin handler config
 sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/conf-enabled/phpmyadmin.conf
 # Set new phpmyadmin handler config: /etc/apache2/conf-enabled/phpmyadmin.conf
-if [ "$WEBDEV_ENABLE_PHP_74_FPM" = 1 ]; then
+if [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
+  echo "==============Setting phpMyAdmin handler to 8.0 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.0-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_74_FPM" = 1 ]; then
 	echo "==============Setting phpMyAdmin handler to 7.4 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.4-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 elif [ "$WEBDEV_ENABLE_PHP_73_FPM" = 1 ]; then
@@ -86,7 +89,7 @@ fi
 # Update PHP xdebug.remote_host IP
 if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
 	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini 
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini
 fi
 
 # Only start PHP 5.6 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
@@ -123,6 +126,12 @@ fi
 if [ "$WEBDEV_ENABLE_PHP_74_FPM" = 1 ]; then
 	echo "==============Starting PHP 7.4 FPM..."
 	service php7.4-fpm start
+fi
+
+# Only start PHP 8.0 FPM if WEBDEV_ENABLE_PHP_80_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
+	echo "==============Starting PHP 8.0 FPM..."
+	service php8.0-fpm start
 fi
 
 # Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
