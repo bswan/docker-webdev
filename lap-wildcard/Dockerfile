@@ -72,6 +72,9 @@ RUN ln -sf /dev/stderr /var/log/apache2/error.log
 ADD apache-foreground.sh /usr/local/bin/
 RUN ["chmod", "+x", "/usr/local/bin/apache-foreground.sh"]
 
+# Add a template .bashrc so password is asked for SSH only once in session
+ADD bashrc-example /root/.bashrc
+
 EXPOSE 80 443
 
 ENV WEBDEV_PHPMYADMIN_DB_HOST 	mariadb

@@ -33,6 +33,11 @@ if [ -d /tmpwww/ ]; then
 	chmod -R 777 /tmpwww/
 fi
 
+# If we are adding our SSH keys from localhost, update permissions so its protected
+if [ -d /root/.ssh/ ]; then
+	chmod -R 400 /root/.ssh/
+fi
+
 # Setup custom 'db' host IP
 if [ -z ${WEBDEV_DB_HOST_IP+x} ]; then
 	echo "No custom WEBDEV_DB_HOST_IP"
