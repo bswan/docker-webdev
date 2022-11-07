@@ -3,15 +3,15 @@ MAINTAINER Jonathon Su <jonathon.su@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
 ### Change to default mirror to AU mirror - https://wiki.ubuntu.com/AustralianTeam/LocalAptMirrors#Australian_Mirrors
-RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
-	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
-	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
+#RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
+#	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
+#	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
 ### SET UP
 RUN apt-get -qq update
 
 # Supporting tools
-RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils mariadb-client
+RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils mariadb-client mc
 
 RUN echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
 	echo "en_US.UTF-8 UTF-8\n" > /etc/locale.gen && \
@@ -22,12 +22,18 @@ ENV ENV LANG en_US.UTF-8
 # APACHE
 RUN apt-get -qqy install apache2
 
-## Stable PHP Versions - 5.6 | 7.0 | 7.1 | 7,2
+## Stable PHP Versions - 5.6 | 7.0 | 7.1 | 7.2
 RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
 
 RUN apt-get -qq update
 
 RUN apt-get -qqy upgrade
+
+# PHP 8.1
+RUN apt-get -qqy install php8.1 php8.1-cli php8.1-fpm php8.1-mysql php8.1-curl php8.1-soap php8.1-common php8.1-gd php8.1-tidy php8.1-mbstring php8.1-xml php8.1-intl php8.1-memcache php8.1-yaml php8.1-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/8.1/cli/conf.d/timezone.ini && \
+    echo "date.timezone = Australia/Sydney" > /etc/php/8.1/fpm/conf.d/timezone.ini
 
 # PHP 8.0
 RUN apt-get -qqy install php8.0 php8.0-cli php8.0-fpm php8.0-mysql php8.0-curl php8.0-soap php8.0-common php8.0-gd php8.0-tidy php8.0-mbstring php8.0-xml php8.0-intl php8.0-memcache php8.0-yaml php8.0-zip
@@ -89,9 +95,16 @@ ADD phpmyadmin.config.inc.php /opt/phpmyadmin/config.inc.php
 RUN mkdir /opt/phpmyadmin/tmp
 
 # Composer
+# Composer 2
 RUN wget https://getcomposer.org/composer.phar && \
 	chmod +x composer.phar && \
-	mv composer.phar /usr/local/bin/composer
+	mv composer.phar /usr/local/bin/composer2
+#Composer 1 
+RUN	cp /usr/local/bin/composer2 /usr/local/bin/composer1 && \
+	composer1 self-update --1
+#Alternatives
+RUN update-alternatives --install /usr/local/bin/composer composer /usr/local/bin/composer2 2
+RUN update-alternatives --install /usr/local/bin/composer composer /usr/local/bin/composer1 1
 
 # NodeJS and common global NPM modules
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
@@ -110,3 +123,7 @@ RUN wget -q -O - https://packagecloud.io/gpg.key | apt-key add - && \
 RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - && \
 echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list && \
 apt update && apt install blackfire-agent blackfire-php
+
+#SSPAK
+RUN curl -sS https://silverstripe.github.io/sspak/install | php -- /usr/local/bin
+
