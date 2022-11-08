@@ -56,11 +56,22 @@ echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmy
 echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin/config.inc.php
 echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 
+#Setup composer github token, if provided
+if [ "$COMPOSER_GITHUB_TOKEN" != "" ]; then
+	echo "{\"github-oauth\": {\"github.com\": \"$COMPOSER_GITHUB_TOKEN\"}}" >> /root/.config/composer/auth.json
+	echo "Composer Auth file created"
+else
+	echo "No GitHub token provided"
+fi
+
 ## setup phpmyadmin config to use correct php.fpm handler, depending on php version set
 # Remove old phpmyadmin handler config
 sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/conf-enabled/phpmyadmin.conf
 # Set new phpmyadmin handler config: /etc/apache2/conf-enabled/phpmyadmin.conf
-if [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
+if [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
+  echo "==============Setting phpMyAdmin handler to 8.1 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+elif [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
   echo "==============Setting phpMyAdmin handler to 8.0 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.0-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 elif [ "$WEBDEV_ENABLE_PHP_74_FPM" = 1 ]; then
@@ -83,10 +94,18 @@ elif [ "$WEBDEV_ENABLE_PHP_56_FPM" = 1 ]; then
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.6-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 fi
 
+if [ "$COMPOSER_DEFAULT_VERSION" = 1 ]; then
+  	echo "==============Selecting a Composer v1.x to answer to composer command"
+	RUN update-alternatives --set composer /usr/local/bin/composer1
+elif [ "$COMPOSER_DEFAULT_VERSION" = 2 ]; then
+  	echo "==============Selecting a Composer v2.x to answer to composer command"
+	RUN update-alternatives --set composer /usr/local/bin/composer2
+fi
+
 # Update Blackfire agent & client & start service
 rm /etc/blackfire/agent
 rm /root/.blackfire.ini
-if [ "BLACKFIRE_SERVER_ID" != "" ] && [ "BLACKFIRE_SERVER_TOKEN" != "" ] && [ "BLACKFIRE_CLIENT_ID" != "" ] && [ "BLACKFIRE_CLIENT_TOKEN" != "" ]; then
+if [ "$BLACKFIRE_SERVER_ID" != "" ] && [ "$BLACKFIRE_SERVER_TOKEN" != "" ] && [ "$BLACKFIRE_CLIENT_ID" != "" ] && [ "$BLACKFIRE_CLIENT_TOKEN" != "" ]; then
     blackfire-agent -register <<< $"$BLACKFIRE_SERVER_ID\n$BLACKFIRE_SERVER_TOKEN\n"
     blackfire config <<< $"$BLACKFIRE_CLIENT_ID\n$BLACKFIRE_CLIENT_TOKEN\n"
 fi
@@ -95,6 +114,12 @@ fi
 if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
 	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
 	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.1/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.2/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.3/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.4/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.0/fpm/php.ini
+	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.1/fpm/php.ini
 fi
 
 # Only start PHP 5.6 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
@@ -137,6 +162,12 @@ fi
 if [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
 	echo "==============Starting PHP 8.0 FPM..."
 	service php8.0-fpm start
+fi
+
+# Only start PHP 8.0 FPM if WEBDEV_ENABLE_PHP_80_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
+	echo "==============Starting PHP 8.1 FPM..."
+	service php8.1-fpm start
 fi
 
 # Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
