@@ -1,17 +1,17 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 MAINTAINER Jonathon Su <jonathon.su@internetrix.com.au>
 ARG DEBIAN_FRONTEND=noninteractive
 
 ### Change to default mirror to AU mirror - https://wiki.ubuntu.com/AustralianTeam/LocalAptMirrors#Australian_Mirrors
-#RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
-#	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
-#	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
+RUN cp /etc/apt/sources.list /etc/apt/sources.list.origin && \
+	sed -i -e 's/http:\/\/archive./http:\/\/au.archive./g' /etc/apt/sources.list && \
+	sed -i -e 's/http:\/\/releases./http:\/\/au.releases./g' /etc/apt/sources.list
 
 ### SET UP
 RUN apt-get -qq update
 
 # Supporting tools
-RUN apt-get -qqy install sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils mariadb-client mc
+RUN apt-get -qqy install sqlite sudo wget telnet nano vim curl make git bzip2 zip unzip gettext-base locales cifs-utils software-properties-common dnsutils iputils-ping net-tools mailutils mariadb-client mc
 
 RUN echo "LANG=en_US.UTF-8\n" > /etc/default/locale && \
 	echo "en_US.UTF-8 UTF-8\n" > /etc/locale.gen && \
@@ -83,16 +83,26 @@ RUN echo "webdev is ok" > /var/www/html/index.html
 
 # Setup phpmyadmin
 ADD apache-phpmyadmin.conf /etc/apache2/conf-available/phpmyadmin.conf
+ADD apache-phpmyadmin_legacy.conf /etc/apache2/conf-available/phpmyadmin_legacy.conf
 
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.tar.gz && \
-	tar xzf phpMyAdmin-5.1.0-all-languages.tar.gz -C /opt && \
-	rm phpMyAdmin-5.1.0-all-languages.tar.gz && \
-	mv /opt/phpMyAdmin-5.1.0-all-languages /opt/phpmyadmin && \
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.tar.gz && \
+	tar xzf phpMyAdmin-5.2.0-all-languages.tar.gz -C /opt && \
+	rm phpMyAdmin-5.2.0-all-languages.tar.gz && \
+	mv /opt/phpMyAdmin-5.2.0-all-languages /opt/phpmyadmin && \
 	a2enconf phpmyadmin.conf
+
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.10/phpMyAdmin-4.9.10-all-languages.tar.gz && \
+	tar xzf phpMyAdmin-4.9.10-all-languages.tar.gz -C /opt && \
+	rm phpMyAdmin-4.9.10-all-languages.tar.gz && \
+	mv /opt/phpMyAdmin-4.9.10-all-languages /opt/phpmyadmin_legacy
 	
 # Add default phpmyadmin config
 ADD phpmyadmin.config.inc.php /opt/phpmyadmin/config.inc.php
 RUN mkdir /opt/phpmyadmin/tmp
+
+# Add default phpmyadmin config
+ADD phpmyadmin.config.inc.php /opt/phpmyadmin_legacy/config.inc.php
+RUN mkdir /opt/phpmyadmin_legacy/tmp
 
 # Composer
 # Composer 2

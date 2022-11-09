@@ -56,6 +56,16 @@ echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmy
 echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin/config.inc.php
 echo "##END-webdev-config" >> /opt/phpmyadmin/config.inc.php
 
+# Setup phpmyadmin db config for legacy PMA
+## Remove old webdev config
+sed -i '/##START-webdev-config/,/##END-webdev-config/d' /opt/phpmyadmin_legacy/config.inc.php
+echo "##START-webdev-config" >> /opt/phpmyadmin_legacy/config.inc.php
+echo "# Override default config" >> /opt/phpmyadmin_legacy/config.inc.php
+echo "\$cfg['Servers'][1]['host'] = '$WEBDEV_PHPMYADMIN_DB_HOST';" >> /opt/phpmyadmin_legacy/config.inc.php
+echo "\$cfg['Servers'][1]['user'] = '$WEBDEV_PHPMYADMIN_DB_USER';" >> /opt/phpmyadmin_legacy/config.inc.php
+echo "\$cfg['Servers'][1]['password'] = '$WEBDEV_PHPMYADMIN_DB_PW';" >> /opt/phpmyadmin_legacy/config.inc.php
+echo "##END-webdev-config" >> /opt/phpmyadmin_legacy/config.inc.php
+
 #Setup composer github token, if provided
 if [ "$COMPOSER_GITHUB_TOKEN" != "" ]; then
 	echo "{\"github-oauth\": {\"github.com\": \"$COMPOSER_GITHUB_TOKEN\"}}" >> /root/.config/composer/auth.json
@@ -85,13 +95,22 @@ elif [ "$WEBDEV_ENABLE_PHP_72_FPM" = 1 ]; then
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.2-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 elif [ "$WEBDEV_ENABLE_PHP_71_FPM" = 1 ]; then
 	echo "==============Setting phpMyAdmin socket to 7.1 ..."
-	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+	a2disconf phpmyadmin.conf 
+	rm /etc/apache2/conf-enabled/phpmyadmin.conf
+	a2enconf phpmyadmin_legacy.conf
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin_legacy.conf
 elif [ "$WEBDEV_ENABLE_PHP_70_FPM" = 1 ]; then
 	echo "==============Setting phpMyAdmin socket to 7.0 ..."
-	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.0-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+	a2disconf phpmyadmin.conf
+	rm /etc/apache2/conf-enabled/phpmyadmin.conf
+	a2enconf phpmyadmin_legacy.conf
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php7.0-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin_legacy.conf
 elif [ "$WEBDEV_ENABLE_PHP_56_FPM" = 1 ]; then
 	echo "==============Setting phpMyAdmin socket to 5.6 ..."
-	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.6-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
+	a2disconf phpmyadmin.conf 
+	rm /etc/apache2/conf-enabled/phpmyadmin.conf
+	a2enconf phpmyadmin_legacy.conf
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php5.6-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin_legacy.conf
 fi
 
 if [ "$COMPOSER_DEFAULT_VERSION" = 1 ]; then
