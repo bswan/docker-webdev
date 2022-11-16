@@ -68,7 +68,7 @@ echo "##END-webdev-config" >> /opt/phpmyadmin_legacy/config.inc.php
 
 #Setup composer github token, if provided
 if [ "$COMPOSER_GITHUB_TOKEN" != "" ]; then
-	echo "{\"github-oauth\": {\"github.com\": \"$COMPOSER_GITHUB_TOKEN\"}}" >> /root/.config/composer/auth.json
+	echo "{\"github-oauth\": {\"github.com\": \"$COMPOSER_GITHUB_TOKEN\"}}" > /root/.config/composer/auth.json
 	echo "Composer Auth file created"
 else
 	echo "No GitHub token provided"
@@ -131,15 +131,43 @@ fi
 
 # Update PHP xdebug.remote_host IP
 if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.1/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.2/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.3/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.4/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.0/fpm/php.ini
-	sed -i -e "s~xdebug.remote_host=[0-9.a-zA-Z]*~xdebug.remote_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.1/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/5.6/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.0/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.1/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.2/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.3/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.4/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.0/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.1/fpm/php.ini
 fi
+
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_56_MODE~g" /etc/php/5.6/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_70_MODE~g" /etc/php/7.0/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_71_MODE~g" /etc/php/7.1/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_72_MODE~g" /etc/php/7.2/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_73_MODE~g" /etc/php/7.3/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_74_MODE~g" /etc/php/7.4/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_80_MODE~g" /etc/php/8.0/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_81_MODE~g" /etc/php/8.1/fpm/php.ini
+
+mkdir /tmp/xdebug
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php56~g" /etc/php/5.6/fpm/php.ini
+mkdir /tmp/xdebug/php56
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php70~g" /etc/php/7.0/fpm/php.ini
+mkdir /tmp/xdebug/php70
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php71~g" /etc/php/7.1/fpm/php.ini
+mkdir /tmp/xdebug/php71
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php72~g" /etc/php/7.2/fpm/php.ini
+mkdir /tmp/xdebug/php72
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php73~g" /etc/php/7.3/fpm/php.ini
+mkdir /tmp/xdebug/php73
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php74~g" /etc/php/7.4/fpm/php.ini
+mkdir /tmp/xdebug/php74
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php80~g" /etc/php/8.0/fpm/php.ini
+mkdir /tmp/xdebug/php80
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php81~g" /etc/php/8.1/fpm/php.ini
+mkdir /tmp/xdebug/php81
+chmod -R 0777 /tmp/xdebug/
 
 # Only start PHP 5.6 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
 if [ "$WEBDEV_ENABLE_PHP_56_FPM" = 1 ]; then
