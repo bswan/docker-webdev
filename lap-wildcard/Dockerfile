@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get -y install php-xdebug
 
-# Add custom PHP 5.6 | 7.0 | 7.1 | 7.2 | 7.3 | 7.4 config
+# Add custom PHP 5.6 | 7.0 | 7.1 | 7.2 | 7.3 | 7.4 | 8.0 | 8.1 config
 ADD config/php/webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
 RUN cat /etc/php/webdev_common_php_config.ini | tee -a /etc/php/5.6/fpm/php.ini /etc/php/7.0/fpm/php.ini /etc/php/7.1/fpm/php.ini /etc/php/7.2/fpm/php.ini /etc/php/7.3/fpm/php.ini /etc/php/7.4/fpm/php.ini /etc/php/8.0/fpm/php.ini /etc/php/8.1/fpm/php.ini
 
@@ -90,6 +90,14 @@ ENV WEBDEV_ENABLE_PHP_73_FPM 	1
 ENV WEBDEV_ENABLE_PHP_74_FPM 	1
 ENV WEBDEV_ENABLE_PHP_80_FPM 	1
 ENV WEBDEV_ENABLE_PHP_81_FPM 	1
+ENV XDEBUG_PHP_56_MODE          'develop'
+ENV XDEBUG_PHP_70_MODE          'develop'
+ENV XDEBUG_PHP_71_MODE          'develop'
+ENV XDEBUG_PHP_72_MODE          'develop'
+ENV XDEBUG_PHP_73_MODE          'develop'
+ENV XDEBUG_PHP_74_MODE          'develop'
+ENV XDEBUG_PHP_80_MODE          'develop'
+ENV XDEBUG_PHP_81_MODE          'develop'
 ENV WEBDEV_REMOTE_HOST_IP		192.168.99.1
 ENV WEBDEV_CIFS_HOST_FOLDER 	//192.168.99.1/www
 ENV WEBDEV_CIFS_SMB_VERSION 	3.0
