@@ -29,6 +29,12 @@ RUN apt-get -qq update
 
 RUN apt-get -qqy upgrade
 
+# PHP 8.2
+RUN apt-get -qqy install php8.2 php8.2-cli php8.2-xdebug php8.2-fpm php8.2-mysql php8.2-curl php8.2-soap php8.2-common php8.2-gd php8.2-tidy php8.2-mbstring php8.2-xml php8.2-intl php8.2-memcache php8.2-yaml php8.2-zip
+
+RUN echo "date.timezone = Australia/Sydney" > /etc/php/8.2/cli/conf.d/timezone.ini && \
+    echo "date.timezone = Australia/Sydney" > /etc/php/8.2/fpm/conf.d/timezone.ini
+
 # PHP 8.1
 RUN apt-get -qqy install php8.1 php8.1-cli php8.1-xdebug php8.1-fpm php8.1-mysql php8.1-curl php8.1-soap php8.1-common php8.1-gd php8.1-tidy php8.1-mbstring php8.1-xml php8.1-intl php8.1-memcache php8.1-yaml php8.1-zip
 

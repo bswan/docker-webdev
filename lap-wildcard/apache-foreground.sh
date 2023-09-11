@@ -78,6 +78,9 @@ fi
 # Remove old phpmyadmin handler config
 sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/conf-enabled/phpmyadmin.conf
 # Set new phpmyadmin handler config: /etc/apache2/conf-enabled/phpmyadmin.conf
+if [ "$WEBDEV_ENABLE_PHP_82_FPM" = 1 ]; then
+  echo "==============Setting phpMyAdmin handler to 8.2 ..."
+	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 if [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
   echo "==============Setting phpMyAdmin handler to 8.1 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
@@ -139,6 +142,7 @@ if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
 	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/7.4/fpm/php.ini
 	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.0/fpm/php.ini
 	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.1/fpm/php.ini
+	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.2/fpm/php.ini
 fi
 
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_56_MODE~g" /etc/php/5.6/fpm/php.ini
@@ -149,6 +153,7 @@ sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_73_MODE~g" /etc/
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_74_MODE~g" /etc/php/7.4/fpm/php.ini
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_80_MODE~g" /etc/php/8.0/fpm/php.ini
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_81_MODE~g" /etc/php/8.1/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_81_MODE~g" /etc/php/8.2/fpm/php.ini
 
 mkdir /tmp/xdebug
 sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php56~g" /etc/php/5.6/fpm/php.ini
@@ -167,6 +172,8 @@ sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php8
 mkdir /tmp/xdebug/php80
 sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php81~g" /etc/php/8.1/fpm/php.ini
 mkdir /tmp/xdebug/php81
+sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php82~g" /etc/php/8.2/fpm/php.ini
+mkdir /tmp/xdebug/php82
 chmod -R 0777 /tmp/xdebug/
 
 # Only start PHP 5.6 FPM if WEBDEV_ENABLE_PHP_70_FPM is 1
@@ -211,10 +218,16 @@ if [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
 	service php8.0-fpm start
 fi
 
-# Only start PHP 8.0 FPM if WEBDEV_ENABLE_PHP_80_FPM is 1
+# Only start PHP 8.1 FPM if WEBDEV_ENABLE_PHP_81_FPM is 1
 if [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
 	echo "==============Starting PHP 8.1 FPM..."
 	service php8.1-fpm start
+fi
+
+# Only start PHP 8.2 FPM if WEBDEV_ENABLE_PHP_82_FPM is 1
+if [ "$WEBDEV_ENABLE_PHP_82_FPM" = 1 ]; then
+	echo "==============Starting PHP 8.2 FPM..."
+	service php8.2-fpm start
 fi
 
 # Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
