@@ -3,6 +3,12 @@
 
 ## Using Locally
 
+### Running locally
+
+TODO
+
+### Building Containers locally
+
 To use these containers locally, they will need to be built & tagged into images first.
 
 1. Start with the [./lap/Dockerfile](./lap/Dockerfile)
