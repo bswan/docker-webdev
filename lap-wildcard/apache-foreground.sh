@@ -81,7 +81,7 @@ sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/co
 if [ "$WEBDEV_ENABLE_PHP_82_FPM" = 1 ]; then
   echo "==============Setting phpMyAdmin handler to 8.2 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
-if [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
+elif [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
   echo "==============Setting phpMyAdmin handler to 8.1 ..."
 	sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
 elif [ "$WEBDEV_ENABLE_PHP_80_FPM" = 1 ]; then
