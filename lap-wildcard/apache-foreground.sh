@@ -153,7 +153,7 @@ sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_73_MODE~g" /etc/
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_74_MODE~g" /etc/php/7.4/fpm/php.ini
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_80_MODE~g" /etc/php/8.0/fpm/php.ini
 sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_81_MODE~g" /etc/php/8.1/fpm/php.ini
-sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_81_MODE~g" /etc/php/8.2/fpm/php.ini
+sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_82_MODE~g" /etc/php/8.2/fpm/php.ini
 
 mkdir /tmp/xdebug
 sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php56~g" /etc/php/5.6/fpm/php.ini
