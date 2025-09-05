@@ -1,7 +1,7 @@
-FROM internetrix/webdev:lap
+FROM internetrix/webdev:legacy-lap
 LABEL "org.opencontainers.image.authors"="Vladyslav Aksonov <vladyslav.aksonov@gmail.com>"
-LABEL "org.opencontainers.image.source"="https://github.com/bswan2/docker-webdev/lap-wildcard"
-LABEL "org.opencontainers.image.description"="A Docker image for PHP web development with Apache wildcard domains, multiple PHP versions, phpMyAdmin, Composer, NodeJS, XDebug and more."
+LABEL "org.opencontainers.image.source"="https://github.com/bswan2/docker-webdev/legacy/leegacy-lap-wildcard"
+LABEL "org.opencontainers.image.description"="A Docker image for PHP web development with Apache wildcard domains, multiple PHP versions (including EoL), phpMyAdmin, Composer, NodeJS, XDebug and more."
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -11,7 +11,7 @@ RUN apt-get -y install php-xdebug
 
 # Add custom PHP configs
 ADD config/php/webdev_common_php_config.ini /etc/php/webdev_common_php_config.ini
-RUN cat /etc/php/webdev_common_php_config.ini | tee -a  /etc/php/8.1/fpm/php.ini /etc/php/8.2/fpm/php.ini /etc/php/8.3/fpm/php.ini /etc/php/8.4/fpm/php.ini
+RUN cat /etc/php/webdev_common_php_config.ini | tee -a {{PHP_INI_FILES}}
 
 ### Apache Configuration
 RUN a2enmod rewrite proxy proxy_fcgi proxy_http expires ssl vhost_alias headers env
@@ -29,20 +29,12 @@ RUN mkdir /var/www/php/ && \
  	a2enconf phpinfo.conf
 
 # Setup Apache wildcard vhosts
-ADD config/apache/sites/apache-wildcard-php81-vhost.conf /etc/apache2/sites-available/001-wildcard-php81-vhost.conf
-ADD config/apache/sites/apache-wildcard-php82-vhost.conf /etc/apache2/sites-available/001-wildcard-php82-vhost.conf
-ADD config/apache/sites/apache-wildcard-php83-vhost.conf /etc/apache2/sites-available/001-wildcard-php83-vhost.conf
-ADD config/apache/sites/apache-wildcard-php84-vhost.conf /etc/apache2/sites-available/001-wildcard-php84-vhost.conf
-
+{{APACHE_VHOSTS}}
 
 # Default wildcard has lowest priority
 ADD config/apache/sites/apache-wildcard-default-vhost.conf /etc/apache2/sites-available/111-wildcard-default.conf
 
-RUN a2ensite \ 
-	001-wildcard-php81-vhost.conf \
-	001-wildcard-php82-vhost.conf \
-	001-wildcard-php83-vhost.conf \
-	001-wildcard-php84-vhost.conf \
+RUN a2ensite \ {{APACHE_SITES}}
     111-wildcard-default.conf
 
 # Setup Webgrind - web based front-end xdebug profile information presentation tool
@@ -76,14 +68,6 @@ ENV WEBDEV_CIFS_USER=container
 ENV WEBDEV_CIFS_PW=container123
 ENV WEBDEV_POSTFIX_RELAYHOST=[mailhog]:1025
 ENV COMPOSER_DEFAULT_VERSION=2
-ENV WEBDEV_ENABLE_PHP_81_FPM=1
-ENV XDEBUG_PHP_81_MODE='develop'
-ENV WEBDEV_ENABLE_PHP_82_FPM=1
-ENV XDEBUG_PHP_82_MODE='develop'
-ENV WEBDEV_ENABLE_PHP_83_FPM=1
-ENV XDEBUG_PHP_83_MODE='develop'
-ENV WEBDEV_ENABLE_PHP_84_FPM=1
-ENV XDEBUG_PHP_84_MODE='develop'
-
+{{ENVS}}
 
 CMD ["/usr/local/bin/apache-foreground.sh"]

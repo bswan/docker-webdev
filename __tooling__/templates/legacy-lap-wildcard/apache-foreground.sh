@@ -69,20 +69,7 @@ fi
 # Remove old phpmyadmin handler config
 sed -i '/#phpmyadminhandlerstart/,/#phpmyadminhandlerend/{//!d}' /etc/apache2/conf-enabled/phpmyadmin.conf
 # Set new phpmyadmin handler config: /etc/apache2/conf-enabled/phpmyadmin.conf
-if [ "$WEBDEV_ENABLE_PHP_84_FPM" = 1 ]; then 
-    echo "==============Setting phpMyAdmin handler to 8.4 ..." 
-    sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.4-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
-elif [ "$WEBDEV_ENABLE_PHP_83_FPM" = 1 ]; then 
-    echo "==============Setting phpMyAdmin handler to 8.3 ..." 
-    sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.3-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
-elif [ "$WEBDEV_ENABLE_PHP_82_FPM" = 1 ]; then 
-    echo "==============Setting phpMyAdmin handler to 8.2 ..." 
-    sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
-elif [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then 
-    echo "==============Setting phpMyAdmin handler to 8.1 ..." 
-    sed -i '/#phpmyadminhandlerstart/a SetHandler "proxy:unix:/run/php/php8.1-fpm.sock|fcgi://localhost"' /etc/apache2/conf-enabled/phpmyadmin.conf
-
-fi
+{{PMA_HANDLER_SELECTOR}}
 
 if [ "$COMPOSER_DEFAULT_VERSION" = 1 ]; then
   	echo "==============Selecting a Composer v1.x to answer to composer command"
@@ -94,56 +81,16 @@ fi
 
 # Update PHP xdebug.remote_host IP
 if [ "$WEBDEV_REMOTE_HOST_IP" != "" ]; then
-		sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.1/fpm/php.ini
-	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.2/fpm/php.ini
-	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.3/fpm/php.ini
-	sed -i -e "s~xdebug.client_host=[0-9.a-zA-Z]*~xdebug.client_host=$WEBDEV_REMOTE_HOST_IP~g" /etc/php/8.4/fpm/php.ini
-
+	{{XDEBUG_IP}}
 fi
 
-sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_81_MODE~g" /etc/php/8.1/fpm/php.ini
-sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_82_MODE~g" /etc/php/8.2/fpm/php.ini
-sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_83_MODE~g" /etc/php/8.3/fpm/php.ini
-sed -i -e "s~xdebug.mode=[0-9.,a-zA-Z]*~xdebug.mode=$XDEBUG_PHP_84_MODE~g" /etc/php/8.4/fpm/php.ini
-
+{{XDEBUG_MODE}}
 
 mkdir /tmp/xdebug
-sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php81~g" /etc/php/8.1/fpm/php.ini 
-mkdir /tmp/xdebug/php81
-sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php82~g" /etc/php/8.2/fpm/php.ini 
-mkdir /tmp/xdebug/php82
-sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php83~g" /etc/php/8.3/fpm/php.ini 
-mkdir /tmp/xdebug/php83
-sed -i -e "s~xdebug.output_dir=[0-9./a-zA-Z]*~xdebug.output_dir=/tmp/xdebug/php84~g" /etc/php/8.4/fpm/php.ini 
-mkdir /tmp/xdebug/php84
-
+{{XDEBUG_DIRS}}
 chmod -R 0777 /tmp/xdebug/
 
-
-# Only start PHP 8.1 FPM if WEBDEV_ENABLE_PHP_81_FPM is 1
-    if [ "$WEBDEV_ENABLE_PHP_81_FPM" = 1 ]; then
-        echo "==============Starting PHP 8.1 FPM..."
-        service php8.1-fpm start
-    fi
-
-# Only start PHP 8.2 FPM if WEBDEV_ENABLE_PHP_82_FPM is 1
-    if [ "$WEBDEV_ENABLE_PHP_82_FPM" = 1 ]; then
-        echo "==============Starting PHP 8.2 FPM..."
-        service php8.2-fpm start
-    fi
-
-# Only start PHP 8.3 FPM if WEBDEV_ENABLE_PHP_83_FPM is 1
-    if [ "$WEBDEV_ENABLE_PHP_83_FPM" = 1 ]; then
-        echo "==============Starting PHP 8.3 FPM..."
-        service php8.3-fpm start
-    fi
-
-# Only start PHP 8.4 FPM if WEBDEV_ENABLE_PHP_84_FPM is 1
-    if [ "$WEBDEV_ENABLE_PHP_84_FPM" = 1 ]; then
-        echo "==============Starting PHP 8.4 FPM..."
-        service php8.4-fpm start
-    fi
-
+{{PHP_SERVICES}}
 
 # Setup Postfix custom relayhost. e.g. for Mailhog (https://hub.docker.com/r/mailhog/mailhog/)
 if [ -z ${WEBDEV_POSTFIX_RELAYHOST+x} ]; then

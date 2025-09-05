@@ -2,9 +2,9 @@
 
 This is a LAP base image. Wildcard host webdev will be built on top of this image.
 
-- ubuntu 24.04
+- ubuntu {{UBUNTU_LTS_VERSION}}
 - apache2
-- PHP8.1 PHP8.2 PHP8.3 PHP8.4 via [php ppa]([https://launchpad.net/~ondrej/+archive/ubuntu/php])
+- {{PHP_VERSIONS_LIST}}via [php ppa]([https://launchpad.net/~ondrej/+archive/ubuntu/php])
 - Composer 1&2
 - NPM
 - NodeJS
